@@ -141,13 +141,14 @@ export async function registerRoutes(
       loginAttempts.delete(clientIp);
     }
     const { password } = req.body;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    const adminPassword = process.env.ADMIN_PASSWORD?.trim();
 
     if (!adminPassword) {
       return res.status(500).json({ message: "Admin password not configured" });
     }
 
-    if (password === adminPassword) {
+    console.log(`Login attempt - password length: ${password?.length}, env password length: ${adminPassword.length}`);
+    if (password && password.trim() === adminPassword) {
       loginAttempts.delete(clientIp);
       req.session.isAdmin = true;
       req.session.save((err) => {
