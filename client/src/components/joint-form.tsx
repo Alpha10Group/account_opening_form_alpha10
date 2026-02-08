@@ -1,0 +1,439 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { jointFormSchema, type JointFormData } from "@shared/schema";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader2, Send } from "lucide-react";
+import FormSection from "./form-section";
+
+interface JointFormProps {
+  onSuccess: (referenceNumber: string) => void;
+}
+
+function HolderFields({ prefix, form }: { prefix: "primaryHolder" | "secondaryHolder"; form: any }) {
+  const label = prefix === "primaryHolder" ? "Primary" : "Secondary";
+  return (
+    <FormSection title={`${label} Account Holder`} description={`Personal details of the ${label.toLowerCase()} holder`}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <FormField control={form.control} name={`${prefix}.title`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Title *</FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl><SelectTrigger data-testid={`select-${prefix}-title`}><SelectValue placeholder="Select" /></SelectTrigger></FormControl>
+              <SelectContent>
+                {["Mr", "Mrs", "Miss", "Ms", "Dr", "Chief"].map(t => (
+                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.surname`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Surname *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-surname`} placeholder="Enter surname" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.firstName`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>First Name *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-firstname`} placeholder="Enter first name" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.otherNames`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Other Names</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-othernames`} placeholder="Other names" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.dateOfBirth`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Date of Birth *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-dob`} type="date" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.gender`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Gender *</FormLabel>
+            <FormControl>
+              <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4 pt-2">
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="male" id={`${prefix}-male`} data-testid={`radio-${prefix}-male`} />
+                  <label htmlFor={`${prefix}-male`} className="text-sm">Male</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="female" id={`${prefix}-female`} data-testid={`radio-${prefix}-female`} />
+                  <label htmlFor={`${prefix}-female`} className="text-sm">Female</label>
+                </div>
+              </RadioGroup>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.maritalStatus`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Marital Status *</FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl><SelectTrigger data-testid={`select-${prefix}-marital`}><SelectValue placeholder="Select" /></SelectTrigger></FormControl>
+              <SelectContent>
+                {[{ v: "single", l: "Single" }, { v: "married", l: "Married" }, { v: "divorced", l: "Divorced" }, { v: "widowed", l: "Widowed" }].map(s => (
+                  <SelectItem key={s.v} value={s.v}>{s.l}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.nationality`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Nationality *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-nationality`} placeholder="e.g. Nigerian" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.stateOfOrigin`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>State of Origin *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-state-origin`} placeholder="Enter state" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.phoneNumber`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Phone Number *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-phone`} placeholder="+234 XXX XXXX XXX" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.email`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Email *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-email`} type="email" placeholder="email@example.com" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <div className="sm:col-span-2 lg:col-span-3">
+          <FormField control={form.control} name={`${prefix}.residentialAddress`} render={({ field }) => (
+            <FormItem>
+              <FormLabel>Residential Address *</FormLabel>
+              <FormControl><Textarea data-testid={`input-${prefix}-address`} placeholder="Enter full address" className="resize-none" {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+        </div>
+        <FormField control={form.control} name={`${prefix}.city`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>City *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-city`} placeholder="Enter city" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.state`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>State *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-state`} placeholder="Enter state" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.identificationType`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>ID Type *</FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl><SelectTrigger data-testid={`select-${prefix}-id-type`}><SelectValue placeholder="Select ID type" /></SelectTrigger></FormControl>
+              <SelectContent>
+                <SelectItem value="national_id">National ID Card</SelectItem>
+                <SelectItem value="drivers_license">Driver's License</SelectItem>
+                <SelectItem value="international_passport">International Passport</SelectItem>
+                <SelectItem value="voters_card">Voter's Card</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.identificationNumber`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>ID Number *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-id-number`} placeholder="Enter ID number" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.bvn`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>BVN *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-bvn`} placeholder="11-digit BVN" maxLength={11} {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.occupation`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Occupation *</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-occupation`} placeholder="Enter occupation" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.employerName`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Employer Name</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-employer`} placeholder="Employer name" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.annualIncome`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Annual Income *</FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl><SelectTrigger data-testid={`select-${prefix}-income`}><SelectValue placeholder="Select range" /></SelectTrigger></FormControl>
+              <SelectContent>
+                <SelectItem value="below_500k">Below N500,000</SelectItem>
+                <SelectItem value="500k_1m">N500,000 - N1,000,000</SelectItem>
+                <SelectItem value="1m_5m">N1,000,000 - N5,000,000</SelectItem>
+                <SelectItem value="5m_10m">N5,000,000 - N10,000,000</SelectItem>
+                <SelectItem value="above_10m">Above N10,000,000</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.sourceOfFunds`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Source of Funds *</FormLabel>
+            <Select onValueChange={field.onChange} value={field.value}>
+              <FormControl><SelectTrigger data-testid={`select-${prefix}-source`}><SelectValue placeholder="Select source" /></SelectTrigger></FormControl>
+              <SelectContent>
+                <SelectItem value="salary">Salary/Wages</SelectItem>
+                <SelectItem value="business">Business Income</SelectItem>
+                <SelectItem value="investment">Investment Returns</SelectItem>
+                <SelectItem value="pension">Pension</SelectItem>
+                <SelectItem value="others">Others</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )} />
+      </div>
+    </FormSection>
+  );
+}
+
+export default function JointForm({ onSuccess }: JointFormProps) {
+  const { toast } = useToast();
+  const form = useForm<JointFormData>({
+    resolver: zodResolver(jointFormSchema),
+    defaultValues: {
+      accountType: "joint",
+      accountName: "",
+      accountCurrency: undefined,
+      accountPurpose: "",
+      operatingMandate: undefined,
+      primaryHolder: {
+        title: "", surname: "", firstName: "", otherNames: "", dateOfBirth: "",
+        gender: undefined, maritalStatus: undefined, nationality: "", stateOfOrigin: "",
+        phoneNumber: "", email: "", residentialAddress: "", city: "", state: "",
+        identificationType: undefined, identificationNumber: "", bvn: "",
+        occupation: "", employerName: "", annualIncome: "", sourceOfFunds: "",
+      },
+      secondaryHolder: {
+        title: "", surname: "", firstName: "", otherNames: "", dateOfBirth: "",
+        gender: undefined, maritalStatus: undefined, nationality: "", stateOfOrigin: "",
+        phoneNumber: "", email: "", residentialAddress: "", city: "", state: "",
+        identificationType: undefined, identificationNumber: "", bvn: "",
+        occupation: "", employerName: "", annualIncome: "", sourceOfFunds: "",
+      },
+      nextOfKinFullName: "",
+      nextOfKinRelationship: "",
+      nextOfKinPhone: "",
+      nextOfKinAddress: "",
+      signatureDeclaration: false,
+    },
+  });
+
+  const submitMutation = useMutation({
+    mutationFn: async (data: JointFormData) => {
+      const res = await apiRequest("POST", "/api/applications", data);
+      return res.json();
+    },
+    onSuccess: (data) => {
+      onSuccess(data.referenceNumber);
+    },
+    onError: (error: Error) => {
+      toast({ title: "Submission Failed", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const onSubmit = (data: JointFormData) => {
+    submitMutation.mutate(data);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-0">
+        <FormSection title="Joint Account Details" description="Account name and operating mandate">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="sm:col-span-2">
+              <FormField control={form.control} name="accountName" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Joint Account Name *</FormLabel>
+                  <FormControl><Input data-testid="input-joint-account-name" placeholder="e.g. John & Jane Doe" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+            <FormField control={form.control} name="accountCurrency" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Account Currency *</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl><SelectTrigger data-testid="select-joint-currency"><SelectValue placeholder="Select" /></SelectTrigger></FormControl>
+                  <SelectContent>
+                    <SelectItem value="NGN">Nigerian Naira (NGN)</SelectItem>
+                    <SelectItem value="USD">US Dollar (USD)</SelectItem>
+                    <SelectItem value="GBP">British Pound (GBP)</SelectItem>
+                    <SelectItem value="EUR">Euro (EUR)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="accountPurpose" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Purpose of Account *</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl><SelectTrigger data-testid="select-joint-purpose"><SelectValue placeholder="Select" /></SelectTrigger></FormControl>
+                  <SelectContent>
+                    <SelectItem value="savings">Savings</SelectItem>
+                    <SelectItem value="business">Business Transactions</SelectItem>
+                    <SelectItem value="investment">Investments</SelectItem>
+                    <SelectItem value="personal">Personal/Family Use</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <div className="sm:col-span-2">
+              <FormField control={form.control} name="operatingMandate" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Operating Mandate *</FormLabel>
+                  <FormControl>
+                    <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-col sm:flex-row gap-4 pt-2">
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="jointly" id="jointly" data-testid="radio-jointly" />
+                        <label htmlFor="jointly" className="text-sm">Jointly (All must sign)</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="either_or_survivor" id="either_or" data-testid="radio-either-or" />
+                        <label htmlFor="either_or" className="text-sm">Either or Survivor</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <RadioGroupItem value="any_one_to_sign" id="any_one" data-testid="radio-any-one" />
+                        <label htmlFor="any_one" className="text-sm">Any One to Sign</label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          </div>
+        </FormSection>
+
+        <HolderFields prefix="primaryHolder" form={form} />
+        <HolderFields prefix="secondaryHolder" form={form} />
+
+        <FormSection title="Next of Kin" description="Details of next of kin for the joint account">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormField control={form.control} name="nextOfKinFullName" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name *</FormLabel>
+                <FormControl><Input data-testid="input-joint-nok-name" placeholder="Enter full name" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="nextOfKinRelationship" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Relationship *</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl><SelectTrigger data-testid="select-joint-nok-rel"><SelectValue placeholder="Select" /></SelectTrigger></FormControl>
+                  <SelectContent>
+                    {["Spouse", "Parent", "Sibling", "Child", "Friend", "Other"].map(r => (
+                      <SelectItem key={r} value={r.toLowerCase()}>{r}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="nextOfKinPhone" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number *</FormLabel>
+                <FormControl><Input data-testid="input-joint-nok-phone" placeholder="+234 XXX XXXX XXX" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <div className="sm:col-span-2">
+              <FormField control={form.control} name="nextOfKinAddress" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address *</FormLabel>
+                  <FormControl><Textarea data-testid="input-joint-nok-address" placeholder="Enter full address" className="resize-none" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          </div>
+        </FormSection>
+
+        <FormSection title="Declaration" description="Please read and accept the declaration">
+          <div className="p-4 rounded-md bg-muted/50 text-sm text-muted-foreground mb-4 leading-relaxed">
+            We hereby declare that the information provided in this form is true, complete and correct.
+            We understand that any false or misleading information may result in the rejection of this
+            application or closure of any account opened. We agree to abide by the terms and conditions
+            governing the operation of the joint account. We authorize the bank to verify any information
+            provided and to make enquiries as deemed necessary.
+          </div>
+          <FormField control={form.control} name="signatureDeclaration" render={({ field }) => (
+            <FormItem className="flex items-start gap-3">
+              <FormControl>
+                <Checkbox
+                  data-testid="checkbox-joint-declaration"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="mt-0.5"
+                />
+              </FormControl>
+              <FormLabel className="text-sm font-normal leading-relaxed cursor-pointer">
+                We confirm that we have read, understood and agree to the above declaration and the bank's terms and conditions. *
+              </FormLabel>
+              <FormMessage />
+            </FormItem>
+          )} />
+        </FormSection>
+
+        <div className="flex justify-end gap-3 pt-2 pb-8">
+          <Button
+            type="submit"
+            disabled={submitMutation.isPending}
+            className="gap-2 min-w-[180px]"
+            data-testid="button-submit-joint"
+          >
+            {submitMutation.isPending ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</>
+            ) : (
+              <><Send className="w-4 h-4" /> Submit Application</>
+            )}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
+}

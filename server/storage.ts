@@ -1,38 +1,33 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { applications, type Application, type InsertApplication } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createApplication(application: InsertApplication): Promise<Application>;
+  getApplication(id: string): Promise<Application | undefined>;
+  getApplicationByReference(referenceNumber: string): Promise<Application | undefined>;
+  getAllApplications(): Promise<Application[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  async createApplication(application: InsertApplication): Promise<Application> {
+    const [result] = await db.insert(applications).values(application).returning();
+    return result;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getApplication(id: string): Promise<Application | undefined> {
+    const [result] = await db.select().from(applications).where(eq(applications.id, id));
+    return result;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async getApplicationByReference(referenceNumber: string): Promise<Application | undefined> {
+    const [result] = await db.select().from(applications).where(eq(applications.referenceNumber, referenceNumber));
+    return result;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getAllApplications(): Promise<Application[]> {
+    return db.select().from(applications).orderBy(desc(applications.createdAt));
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
