@@ -2,12 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Eye, User, Users, Building2, Search, Calendar, FileText } from "lucide-react";
+import { ArrowLeft, Eye, User, Users, Building2, Search, Calendar, FileText, LogOut, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import logoImg from "@assets/LOGO3_1770589302028.JPG";
 import type { Application } from "@shared/schema";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
 function ApplicationDetail({ application, onBack }: { application: Application; onBack: () => void }) {
   const formData = application.formData as Record<string, any>;
@@ -85,10 +87,45 @@ function ApplicationDetail({ application, onBack }: { application: Application; 
 export default function Applications() {
   const [search, setSearch] = useState("");
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
+  const { user, isLoading: authLoading, isAuthenticated: isAuthed } = useAuth();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (!authLoading && !isAuthed) {
+      toast({ title: "Unauthorized", description: "Please log in to access the dashboard.", variant: "destructive" });
+      setTimeout(() => { window.location.href = "/api/login"; }, 500);
+    }
+  }, [isAuthed, authLoading]);
 
   const { data: applications, isLoading } = useQuery<Application[]>({
     queryKey: ["/api/applications"],
+    enabled: isAuthed,
   });
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-3" />
+          <p className="text-sm text-muted-foreground">Checking authorization...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthed) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="p-8 text-center max-w-md">
+          <h2 className="text-lg font-semibold mb-2">Admin Access Required</h2>
+          <p className="text-sm text-muted-foreground mb-4">You need to log in to view submitted applications.</p>
+          <a href="/api/login">
+            <Button data-testid="button-login">Log In</Button>
+          </a>
+        </Card>
+      </div>
+    );
+  }
 
   const filtered = applications?.filter((app) => {
     if (!search) return true;
@@ -129,9 +166,21 @@ export default function Applications() {
               <p className="text-xs text-muted-foreground">Applications Dashboard</p>
             </div>
           </div>
-          <Link href="/">
-            <Button variant="outline" size="sm" data-testid="button-back-home">Back to Portal</Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            {user && (
+              <span className="text-xs text-muted-foreground hidden sm:inline" data-testid="text-user-name">
+                {user.firstName} {user.lastName}
+              </span>
+            )}
+            <Link href="/">
+              <Button variant="outline" size="sm" data-testid="button-back-home">Back to Portal</Button>
+            </Link>
+            <a href="/api/logout">
+              <Button variant="ghost" size="icon" data-testid="button-logout">
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </a>
+          </div>
         </div>
       </header>
 

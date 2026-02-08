@@ -6,6 +6,7 @@ import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 
 const uploadsDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadsDir)) {
@@ -66,6 +67,9 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  await setupAuth(app);
+  registerAuthRoutes(app);
+
   app.use("/api/uploads", (await import("express")).default.static(uploadsDir));
 
   app.post("/api/upload-signature", uploadImage.single("file"), (req, res) => {
@@ -135,7 +139,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/applications", async (_req, res) => {
+  app.get("/api/applications", isAuthenticated, async (_req, res) => {
     try {
       const apps = await storage.getAllApplications();
       res.json(apps);
@@ -145,7 +149,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/applications/:id", async (req, res) => {
+  app.get("/api/applications/:id", isAuthenticated, async (req, res) => {
     try {
       const application = await storage.getApplication(req.params.id);
       if (!application) {

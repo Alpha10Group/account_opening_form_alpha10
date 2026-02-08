@@ -244,3 +244,5 @@ export type Application = typeof applications.$inferSelect;
 export type IndividualFormData = z.infer<typeof individualFormSchema>;
 export type JointFormData = z.infer<typeof jointFormSchema>;
 export type CorporateFormData = z.infer<typeof corporateFormSchema>;
+
+export * from "./models/auth";
