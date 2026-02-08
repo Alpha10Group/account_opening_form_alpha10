@@ -46,10 +46,21 @@ A comprehensive account opening form platform for Alpha10 Group (Nigerian financ
 - `server/storage.ts` - Database storage layer
 - `server/db.ts` - Database connection
 
+## Admin Authentication
+- Password-based admin login to protect the Applications Dashboard
+- ADMIN_PASSWORD stored as environment secret
+- SESSION_SECRET required for session management
+- Rate limiting: 5 attempts per IP, 15-minute lockout
+- Sessions stored in PostgreSQL via connect-pg-simple
+- Works on any hosting platform (Replit, Railway, etc.)
+
 ## API Endpoints
-- `POST /api/applications` - Submit a new application
-- `GET /api/applications` - List all applications
-- `GET /api/applications/:id` - Get application by ID
+- `POST /api/applications` - Submit a new application (public)
+- `GET /api/applications` - List all applications (admin only)
+- `GET /api/applications/:id` - Get application by ID (admin only)
+- `POST /api/admin/login` - Admin login with password
+- `POST /api/admin/logout` - Admin logout
+- `GET /api/admin/status` - Check admin auth status
 - `POST /api/upload-signature?category={cat}` - Upload image files (PNG/JPG/WEBP, max 2MB)
 - `POST /api/upload-document?category={cat}` - Upload documents (PNG/JPG/WEBP/PDF, max 5MB)
 - `GET /api/uploads/:filename` - Serve uploaded files

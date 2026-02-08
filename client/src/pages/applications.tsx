@@ -96,8 +96,11 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
     onSuccess: () => {
       onSuccess();
     },
-    onError: () => {
-      toast({ title: "Login Failed", description: "Invalid admin password. Please try again.", variant: "destructive" });
+    onError: (error: Error) => {
+      const msg = error.message.includes("429")
+        ? "Too many login attempts. Please wait and try again."
+        : "Invalid admin password. Please try again.";
+      toast({ title: "Login Failed", description: msg, variant: "destructive" });
       setPassword("");
     },
   });

@@ -83,32 +83,53 @@ export async function registerRoutes(
 ): Promise<Server> {
   app.set("trust proxy", 1);
 
-  const sessionTtl = 7 * 24 * 60 * 60 * 1000;
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET environment variable is required");
+  }
+
+  const sessionTtlMs = 7 * 24 * 60 * 60 * 1000;
+  const sessionTtlSec = 7 * 24 * 60 * 60;
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
     createTableIfMissing: true,
-    ttl: sessionTtl,
+    ttl: sessionTtlSec,
     tableName: "sessions",
   });
 
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || "alpha10-fallback-secret-change-me",
+      secret: process.env.SESSION_SECRET,
       store: sessionStore,
       resave: false,
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: sessionTtl,
+        maxAge: sessionTtlMs,
       },
     })
   );
 
   app.use("/api/uploads", (await import("express")).default.static(uploadsDir));
 
+  const loginAttempts = new Map<string, { count: number; lastAttempt: number }>();
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_MS = 15 * 60 * 1000;
+
   app.post("/api/admin/login", (req, res) => {
+    const clientIp = req.ip || "unknown";
+    const now = Date.now();
+    const attempts = loginAttempts.get(clientIp);
+
+    if (attempts && attempts.count >= MAX_ATTEMPTS && (now - attempts.lastAttempt) < LOCKOUT_MS) {
+      const minutesLeft = Math.ceil((LOCKOUT_MS - (now - attempts.lastAttempt)) / 60000);
+      return res.status(429).json({ message: `Too many login attempts. Try again in ${minutesLeft} minutes.` });
+    }
+
+    if (attempts && (now - attempts.lastAttempt) >= LOCKOUT_MS) {
+      loginAttempts.delete(clientIp);
+    }
     const { password } = req.body;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
@@ -117,6 +138,7 @@ export async function registerRoutes(
     }
 
     if (password === adminPassword) {
+      loginAttempts.delete(clientIp);
       req.session.isAdmin = true;
       req.session.save((err) => {
         if (err) {
@@ -125,6 +147,10 @@ export async function registerRoutes(
         res.json({ success: true });
       });
     } else {
+      const current = loginAttempts.get(clientIp) || { count: 0, lastAttempt: now };
+      current.count += 1;
+      current.lastAttempt = now;
+      loginAttempts.set(clientIp, current);
       res.status(401).json({ message: "Invalid password" });
     }
   });
