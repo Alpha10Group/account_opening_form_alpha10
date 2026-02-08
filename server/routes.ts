@@ -90,20 +90,16 @@ export async function registerRoutes(
   const sessionTtlMs = 7 * 24 * 60 * 60 * 1000;
   const sessionTtlSec = 7 * 24 * 60 * 60;
   const pgStore = connectPg(session);
-  const sessionStoreOptions: any = {
-    conString: process.env.DATABASE_URL,
+  const sessionPool = new (await import("pg")).default.Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  });
+  const sessionStore = new pgStore({
+    pool: sessionPool,
     createTableIfMissing: true,
     ttl: sessionTtlSec,
     tableName: "sessions",
-  };
-  if (process.env.NODE_ENV === "production") {
-    sessionStoreOptions.conObject = {
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    };
-    delete sessionStoreOptions.conString;
-  }
-  const sessionStore = new pgStore(sessionStoreOptions);
+  });
 
   app.use(
     session({
@@ -147,7 +143,6 @@ export async function registerRoutes(
       return res.status(500).json({ message: "Admin password not configured" });
     }
 
-    console.log(`Login attempt - password length: ${password?.length}, env password length: ${adminPassword.length}`);
     if (password && password.trim() === adminPassword) {
       loginAttempts.delete(clientIp);
       req.session.isAdmin = true;
