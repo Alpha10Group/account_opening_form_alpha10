@@ -12,26 +12,47 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-const signatureStorage = multer.diskStorage({
+const uploadStorage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadsDir),
-  filename: (_req, file, cb) => {
+  filename: (req, file, cb) => {
+    const category = (req.query.category as string) || "file";
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
-    cb(null, `signature-${uniqueSuffix}${ext}`);
+    cb(null, `${category}-${uniqueSuffix}${ext}`);
   },
 });
 
-const upload = multer({
-  storage: signatureStorage,
+const imageOnlyFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  const allowed = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+  if (allowed.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only PNG, JPG, and WEBP image files are allowed"));
+  }
+};
+
+const documentFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  const allowed = [
+    "image/png", "image/jpeg", "image/jpg", "image/webp",
+    "application/pdf",
+  ];
+  if (allowed.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only PNG, JPG, WEBP, and PDF files are allowed"));
+  }
+};
+
+const uploadImage = multer({
+  storage: uploadStorage,
   limits: { fileSize: 2 * 1024 * 1024 },
-  fileFilter: (_req, file, cb) => {
-    const allowed = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
-    if (allowed.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only PNG, JPG, and WEBP image files are allowed"));
-    }
-  },
+  fileFilter: imageOnlyFilter,
+});
+
+const uploadDocument = multer({
+  storage: uploadStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: documentFilter,
 });
 
 function generateReferenceNumber(type: string): string {
@@ -47,13 +68,27 @@ export async function registerRoutes(
 ): Promise<Server> {
   app.use("/api/uploads", (await import("express")).default.static(uploadsDir));
 
-  app.post("/api/upload-signature", upload.single("signature"), (req, res) => {
+  app.post("/api/upload-signature", uploadImage.single("file"), (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
       const fileUrl = `/api/uploads/${req.file.filename}`;
       res.json({ url: fileUrl, filename: req.file.filename });
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      res.status(500).json({ message: error.message || "Upload failed" });
+    }
+  });
+
+  app.post("/api/upload-document", uploadDocument.single("file"), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      const fileUrl = `/api/uploads/${req.file.filename}`;
+      const isPdf = req.file.mimetype === "application/pdf";
+      res.json({ url: fileUrl, filename: req.file.filename, isPdf });
     } catch (error: any) {
       console.error("Upload error:", error);
       res.status(500).json({ message: error.message || "Upload failed" });

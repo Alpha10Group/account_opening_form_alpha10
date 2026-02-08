@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Upload, X, Loader2, Camera, FileText } from "lucide-react";
+import { Upload, X, Loader2, Camera, FileText, File } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface FileUploadProps {
@@ -11,41 +11,66 @@ interface FileUploadProps {
   description?: string;
   accept?: string;
   variant?: "signature" | "photo" | "document";
+  category?: string;
 }
 
 export default function FileUpload({
   form,
   fieldName,
   testId,
-  label = "Click to upload file",
-  description = "PNG, JPG or WEBP (max 2MB)",
-  accept = "image/png,image/jpeg,image/jpg,image/webp",
+  label,
+  description,
+  accept,
   variant = "document",
+  category,
 }: FileUploadProps) {
   const [uploading, setUploading] = useState(false);
+  const [isPdf, setIsPdf] = useState(false);
   const { toast } = useToast();
   const currentUrl = form.watch(fieldName);
+
+  const isDocumentType = variant === "document";
+  const maxSize = isDocumentType ? 5 : 2;
+  const defaultAccept = isDocumentType
+    ? "image/png,image/jpeg,image/jpg,image/webp,application/pdf"
+    : "image/png,image/jpeg,image/jpg,image/webp";
+  const defaultLabel = variant === "photo"
+    ? "Click to upload passport photograph"
+    : variant === "signature"
+    ? "Click to upload signature"
+    : "Click to upload document";
+  const defaultDescription = isDocumentType
+    ? `PNG, JPG, WEBP or PDF (max ${maxSize}MB)`
+    : `PNG, JPG or WEBP (max ${maxSize}MB)`;
+
+  const finalAccept = accept || defaultAccept;
+  const finalLabel = label || defaultLabel;
+  const finalDescription = description || defaultDescription;
+
+  const endpoint = isDocumentType ? "/api/upload-document" : "/api/upload-signature";
+  const fileCategory = category || (variant === "photo" ? "passport" : variant === "signature" ? "signature" : "document");
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      toast({ title: "File too large", description: "Maximum file size is 2MB", variant: "destructive" });
+    if (file.size > maxSize * 1024 * 1024) {
+      toast({ title: "File too large", description: `Maximum file size is ${maxSize}MB`, variant: "destructive" });
       return;
     }
 
     setUploading(true);
     try {
       const formData = new FormData();
-      formData.append("signature", file);
-      const res = await fetch("/api/upload-signature", { method: "POST", body: formData });
+      formData.append("file", file);
+      const res = await fetch(`${endpoint}?category=${fileCategory}`, { method: "POST", body: formData });
       if (!res.ok) {
         const err = await res.json();
         throw new Error(err.message || "Upload failed");
       }
       const data = await res.json();
       form.setValue(fieldName, data.url, { shouldValidate: true });
+      if (data.isPdf) setIsPdf(true);
     } catch (err: any) {
       toast({ title: "Upload failed", description: err.message, variant: "destructive" });
     } finally {
@@ -55,20 +80,32 @@ export default function FileUpload({
 
   const handleRemove = () => {
     form.setValue(fieldName, "", { shouldValidate: true });
+    setIsPdf(false);
   };
 
   const IconComponent = variant === "photo" ? Camera : variant === "signature" ? Upload : FileText;
+  const urlIsPdf = currentUrl?.endsWith(".pdf");
 
   return (
     <div>
       {currentUrl ? (
         <div className="relative border rounded-md p-2 bg-muted/30 inline-block">
-          <img
-            src={currentUrl}
-            alt="Uploaded file"
-            className={variant === "photo" ? "w-24 h-28 object-cover rounded-md" : "max-h-20 max-w-[200px] object-contain"}
-            data-testid={`img-${testId}`}
-          />
+          {urlIsPdf || isPdf ? (
+            <div className="flex items-center gap-2 px-2 py-1" data-testid={`file-${testId}`}>
+              <File className="w-8 h-8 text-red-500" />
+              <div>
+                <p className="text-xs font-medium">PDF Document</p>
+                <a href={currentUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary underline" data-testid={`link-${testId}`}>View file</a>
+              </div>
+            </div>
+          ) : (
+            <img
+              src={currentUrl}
+              alt="Uploaded file"
+              className={variant === "photo" ? "w-24 h-28 object-cover rounded-md" : "max-h-20 max-w-[200px] object-contain"}
+              data-testid={`img-${testId}`}
+            />
+          )}
           <Button
             type="button"
             variant="ghost"
@@ -84,7 +121,7 @@ export default function FileUpload({
         <label className="cursor-pointer" data-testid={`label-upload-${testId}`}>
           <input
             type="file"
-            accept={accept}
+            accept={finalAccept}
             className="hidden"
             onChange={handleUpload}
             disabled={uploading}
@@ -99,8 +136,8 @@ export default function FileUpload({
             ) : (
               <>
                 <IconComponent className="w-6 h-6" />
-                <span className="text-xs text-center">{label}</span>
-                <span className="text-[10px] text-center">{description}</span>
+                <span className="text-xs text-center">{finalLabel}</span>
+                <span className="text-[10px] text-center">{finalDescription}</span>
               </>
             )}
           </div>
