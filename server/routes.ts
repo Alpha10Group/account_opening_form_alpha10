@@ -67,8 +67,12 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  await setupAuth(app);
-  registerAuthRoutes(app);
+  try {
+    await setupAuth(app);
+    registerAuthRoutes(app);
+  } catch (error) {
+    console.warn("Auth setup skipped:", (error as Error).message);
+  }
 
   app.use("/api/uploads", (await import("express")).default.static(uploadsDir));
 

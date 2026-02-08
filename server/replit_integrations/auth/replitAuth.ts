@@ -61,6 +61,13 @@ async function upsertUser(claims: any) {
 }
 
 export async function setupAuth(app: Express) {
+  if (!process.env.REPL_ID) {
+    throw new Error("REPL_ID not set - auth requires Replit environment");
+  }
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET not set");
+  }
+
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());
