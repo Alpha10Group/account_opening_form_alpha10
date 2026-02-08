@@ -90,12 +90,20 @@ export async function registerRoutes(
   const sessionTtlMs = 7 * 24 * 60 * 60 * 1000;
   const sessionTtlSec = 7 * 24 * 60 * 60;
   const pgStore = connectPg(session);
-  const sessionStore = new pgStore({
+  const sessionStoreOptions: any = {
     conString: process.env.DATABASE_URL,
     createTableIfMissing: true,
     ttl: sessionTtlSec,
     tableName: "sessions",
-  });
+  };
+  if (process.env.NODE_ENV === "production") {
+    sessionStoreOptions.conObject = {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    };
+    delete sessionStoreOptions.conString;
+  }
+  const sessionStore = new pgStore(sessionStoreOptions);
 
   app.use(
     session({
