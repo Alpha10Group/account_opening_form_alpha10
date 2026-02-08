@@ -1,7 +1,13 @@
-# SecureBank Account Opening Portal
+# Alpha10 Group Account Opening Portal
 
 ## Overview
-A comprehensive account opening form platform for Nigerian financial institutions supporting Individual, Joint, and Corporate account types. Captures all standard KYC/regulatory requirements including personal details, identification, employment, account preferences, referees, document uploads, compliance declarations (PEP, FATCA/CRS), indemnity clauses, and electronic signature capabilities.
+A comprehensive account opening form platform for Alpha10 Group (Nigerian financial institution) supporting Individual, Joint, and Corporate account types. Captures all standard KYC/regulatory requirements including personal details, identification, employment, account preferences, referees, document uploads, compliance declarations (PEP, FATCA/CRS), indemnity clauses, and electronic signature capabilities.
+
+## Branding
+- **Company**: Alpha10 Group
+- **Logo**: attached_assets/LOGO3_1770589302028.JPG
+- **Color Scheme**: Black, grey, white, and oxblood (#961A1C)
+- **Primary color**: Oxblood (HSL 359 70% 35%)
 
 ## Architecture
 - **Frontend**: React + TypeScript with Vite, Tailwind CSS, shadcn/ui components
@@ -35,6 +41,7 @@ A comprehensive account opening form platform for Nigerian financial institution
 - `client/src/components/referee-section.tsx` - Reusable referee section component
 - `client/src/components/success-screen.tsx` - Post-submission confirmation
 - `client/src/components/form-section.tsx` - Reusable form section card
+- `client/src/pages/applications.tsx` - Applications dashboard (view/search submitted applications)
 - `server/routes.ts` - API routes for application CRUD and file uploads
 - `server/storage.ts` - Database storage layer
 - `server/db.ts` - Database connection
