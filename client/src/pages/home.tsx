@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Users, Building2, ArrowRight, CheckCircle2, Shield, Clock } from "lucide-react";
+import { User, Users, Building2, ArrowRight, CheckCircle2, Shield, Clock, ClipboardList } from "lucide-react";
+import { Link } from "wouter";
+import logoImg from "@assets/LOGO3_1770589302028.JPG";
 import IndividualForm from "@/components/individual-form";
 import JointForm from "@/components/joint-form";
 import CorporateForm from "@/components/corporate-form";
@@ -18,7 +20,7 @@ const accountOptions = [
     description: "Personal banking account for a single account holder with full access to banking services.",
     icon: User,
     features: ["Personal savings & current", "Debit card access", "Online & mobile banking", "Single signatory"],
-    color: "from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600",
+    color: "from-[#961A1C] to-[#7a1517] dark:from-[#b02022] dark:to-[#961A1C]",
   },
   {
     type: "joint" as const,
@@ -26,7 +28,7 @@ const accountOptions = [
     description: "Shared account for two or more individuals with flexible operating mandates.",
     icon: Users,
     features: ["Shared account access", "Flexible mandates", "Multiple signatories", "Joint liability"],
-    color: "from-emerald-600 to-emerald-700 dark:from-emerald-500 dark:to-emerald-600",
+    color: "from-gray-700 to-gray-800 dark:from-gray-500 dark:to-gray-600",
   },
   {
     type: "corporate" as const,
@@ -34,7 +36,7 @@ const accountOptions = [
     description: "Business account for registered companies with advanced corporate banking features.",
     icon: Building2,
     features: ["Business transactions", "Multiple signatories", "Corporate lending", "Trade services"],
-    color: "from-violet-600 to-violet-700 dark:from-violet-500 dark:to-violet-600",
+    color: "from-gray-900 to-black dark:from-gray-400 dark:to-gray-500",
   },
 ];
 
@@ -83,24 +85,29 @@ export default function Home() {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-md bg-primary flex items-center justify-center">
-              <Shield className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <img src={logoImg} alt="Alpha10 Group" className="w-10 h-10 rounded-md object-contain" data-testid="img-logo" />
             <div>
-              <h1 className="text-lg font-semibold leading-tight" data-testid="text-app-title">SecureBank</h1>
+              <h1 className="text-lg font-semibold leading-tight" data-testid="text-app-title">Alpha10 Group</h1>
               <p className="text-xs text-muted-foreground">Account Opening Portal</p>
             </div>
           </div>
-          {viewState === "form" && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleBackToSelection}
-              data-testid="button-back-selection"
-            >
-              Change Account Type
-            </Button>
-          )}
+          <div className="flex items-center gap-2 flex-wrap">
+            {viewState === "form" && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleBackToSelection}
+                data-testid="button-back-selection"
+              >
+                Change Account Type
+              </Button>
+            )}
+            <Link href="/applications">
+              <Button variant="outline" size="sm" className="gap-1" data-testid="button-view-applications">
+                <ClipboardList className="w-4 h-4" /> Applications
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -134,7 +141,7 @@ export default function Home() {
                     <ul className="space-y-2 mb-5">
                       {option.features.map((f) => (
                         <li key={f} className="flex items-center gap-2 text-sm">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                          <CheckCircle2 className="w-4 h-4 text-[#961A1C] flex-shrink-0" />
                           <span>{f}</span>
                         </li>
                       ))}
@@ -188,7 +195,7 @@ export default function Home() {
 
       <footer className="border-t mt-12 py-6">
         <div className="max-w-6xl mx-auto px-4 text-center text-xs text-muted-foreground">
-          <p>SecureBank Account Opening Portal. All information provided is kept strictly confidential.</p>
+          <p>Alpha10 Group Account Opening Portal. All information provided is kept strictly confidential.</p>
         </div>
       </footer>
     </div>
