@@ -1,15 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Eye, User, Users, Building2, Search, Calendar, FileText, LogOut, Loader2 } from "lucide-react";
+import { ArrowLeft, Eye, User, Users, Building2, Search, Calendar, FileText, LogOut, Loader2, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import logoImg from "@assets/LOGO3_1770589302028.JPG";
 import type { Application } from "@shared/schema";
-import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 function ApplicationDetail({ application, onBack }: { application: Application; onBack: () => void }) {
   const formData = application.formData as Record<string, any>;
@@ -84,22 +84,96 @@ function ApplicationDetail({ application, onBack }: { application: Application; 
   );
 }
 
+function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
+  const [password, setPassword] = useState("");
+  const { toast } = useToast();
+
+  const loginMutation = useMutation({
+    mutationFn: async (pwd: string) => {
+      const res = await apiRequest("POST", "/api/admin/login", { password: pwd });
+      return res.json();
+    },
+    onSuccess: () => {
+      onSuccess();
+    },
+    onError: () => {
+      toast({ title: "Login Failed", description: "Invalid admin password. Please try again.", variant: "destructive" });
+      setPassword("");
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password.trim()) {
+      loginMutation.mutate(password);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="p-8 w-full max-w-sm">
+        <div className="flex flex-col items-center mb-6">
+          <img src={logoImg} alt="Alpha10 Group" className="w-14 h-14 rounded-md object-contain mb-3" />
+          <h2 className="text-lg font-semibold">Admin Access</h2>
+          <p className="text-sm text-muted-foreground text-center mt-1">Enter the admin password to view submitted applications.</p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="password"
+              placeholder="Admin password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="pl-9"
+              data-testid="input-admin-password"
+              autoFocus
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={loginMutation.isPending} data-testid="button-login">
+            {loginMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Log In"}
+          </Button>
+        </form>
+        <div className="mt-4 text-center">
+          <Link href="/">
+            <Button variant="ghost" size="sm" className="text-muted-foreground" data-testid="button-back-home-login">Back to Portal</Button>
+          </Link>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
 export default function Applications() {
   const [search, setSearch] = useState("");
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
-  const { user, isLoading: authLoading, isAuthenticated: isAuthed } = useAuth();
+  const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  useEffect(() => {
-    if (!authLoading && !isAuthed) {
-      toast({ title: "Unauthorized", description: "Please log in to access the dashboard.", variant: "destructive" });
-      setTimeout(() => { window.location.href = "/api/login"; }, 500);
-    }
-  }, [isAuthed, authLoading]);
+  const { data: authStatus, isLoading: authLoading } = useQuery<{ authenticated: boolean }>({
+    queryKey: ["/api/admin/status"],
+    queryFn: async () => {
+      const res = await fetch("/api/admin/status", { credentials: "include" });
+      return res.json();
+    },
+  });
+
+  const isAuthed = authStatus?.authenticated === true;
 
   const { data: applications, isLoading } = useQuery<Application[]>({
     queryKey: ["/api/applications"],
     enabled: isAuthed,
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/admin/logout");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/status"] });
+      toast({ title: "Logged out", description: "You have been logged out." });
+    },
   });
 
   if (authLoading) {
@@ -115,15 +189,11 @@ export default function Applications() {
 
   if (!isAuthed) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="p-8 text-center max-w-md">
-          <h2 className="text-lg font-semibold mb-2">Admin Access Required</h2>
-          <p className="text-sm text-muted-foreground mb-4">You need to log in to view submitted applications.</p>
-          <a href="/api/login">
-            <Button data-testid="button-login">Log In</Button>
-          </a>
-        </Card>
-      </div>
+      <AdminLoginForm
+        onSuccess={() => {
+          queryClient.invalidateQueries({ queryKey: ["/api/admin/status"] });
+        }}
+      />
     );
   }
 
@@ -167,19 +237,18 @@ export default function Applications() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {user && (
-              <span className="text-xs text-muted-foreground hidden sm:inline" data-testid="text-user-name">
-                {user.firstName} {user.lastName}
-              </span>
-            )}
             <Link href="/">
               <Button variant="outline" size="sm" data-testid="button-back-home">Back to Portal</Button>
             </Link>
-            <a href="/api/logout">
-              <Button variant="ghost" size="icon" data-testid="button-logout">
-                <LogOut className="w-4 h-4" />
-              </Button>
-            </a>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => logoutMutation.mutate()}
+              disabled={logoutMutation.isPending}
+              data-testid="button-logout"
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </header>

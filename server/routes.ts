@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import type { Express, RequestHandler } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { individualFormSchema, jointFormSchema, corporateFormSchema } from "@shared/schema";
@@ -6,7 +6,8 @@ import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
 
 const uploadsDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadsDir)) {
@@ -63,18 +64,83 @@ function generateReferenceNumber(type: string): string {
   return `${prefix}-${timestamp}-${random}`;
 }
 
+declare module "express-session" {
+  interface SessionData {
+    isAdmin?: boolean;
+  }
+}
+
+const requireAdmin: RequestHandler = (req, res, next) => {
+  if (req.session?.isAdmin) {
+    return next();
+  }
+  res.status(401).json({ message: "Unauthorized" });
+};
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  try {
-    await setupAuth(app);
-    registerAuthRoutes(app);
-  } catch (error) {
-    console.warn("Auth setup skipped:", (error as Error).message);
-  }
+  app.set("trust proxy", 1);
+
+  const sessionTtl = 7 * 24 * 60 * 60 * 1000;
+  const pgStore = connectPg(session);
+  const sessionStore = new pgStore({
+    conString: process.env.DATABASE_URL,
+    createTableIfMissing: true,
+    ttl: sessionTtl,
+    tableName: "sessions",
+  });
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || "alpha10-fallback-secret-change-me",
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: sessionTtl,
+      },
+    })
+  );
 
   app.use("/api/uploads", (await import("express")).default.static(uploadsDir));
+
+  app.post("/api/admin/login", (req, res) => {
+    const { password } = req.body;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminPassword) {
+      return res.status(500).json({ message: "Admin password not configured" });
+    }
+
+    if (password === adminPassword) {
+      req.session.isAdmin = true;
+      req.session.save((err) => {
+        if (err) {
+          return res.status(500).json({ message: "Session error" });
+        }
+        res.json({ success: true });
+      });
+    } else {
+      res.status(401).json({ message: "Invalid password" });
+    }
+  });
+
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Logout failed" });
+      }
+      res.json({ success: true });
+    });
+  });
+
+  app.get("/api/admin/status", (req, res) => {
+    res.json({ authenticated: !!req.session?.isAdmin });
+  });
 
   app.post("/api/upload-signature", uploadImage.single("file"), (req, res) => {
     try {
@@ -143,7 +209,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/applications", isAuthenticated, async (_req, res) => {
+  app.get("/api/applications", requireAdmin, async (_req, res) => {
     try {
       const apps = await storage.getAllApplications();
       res.json(apps);
@@ -153,7 +219,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/applications/:id", isAuthenticated, async (req, res) => {
+  app.get("/api/applications/:id", requireAdmin, async (req, res) => {
     try {
       const application = await storage.getApplication(req.params.id);
       if (!application) {
