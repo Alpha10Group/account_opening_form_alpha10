@@ -103,9 +103,11 @@ export async function registerRoutes(
       store: sessionStore,
       resave: false,
       saveUninitialized: false,
+      proxy: true,
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        sameSite: "lax" as const,
         maxAge: sessionTtlMs,
       },
     })
