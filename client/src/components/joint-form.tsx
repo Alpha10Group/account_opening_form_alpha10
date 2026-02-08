@@ -266,6 +266,10 @@ export default function JointForm({ onSuccess }: JointFormProps) {
         declarePastPerformance: false,
         declareInfoComplete: false,
         indemnityAccepted: false,
+        signatureName: "",
+        signatureDate: "",
+        secondSignatureName: "",
+        secondSignatureDate: "",
         isPoliticallyExposed: undefined as any,
       },
     },
@@ -404,7 +408,7 @@ export default function JointForm({ onSuccess }: JointFormProps) {
           </div>
         </FormSection>
 
-        <DeclarationsSection form={form} prefix="declarations" />
+        <DeclarationsSection form={form} prefix="declarations" showSecondSignature />
 
         <div className="flex justify-end gap-3 pt-2 pb-8">
           <Button

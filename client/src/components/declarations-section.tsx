@@ -1,11 +1,13 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 import FormSection from "./form-section";
 
 interface DeclarationsSectionProps {
   form: any;
   prefix: string;
+  showSecondSignature?: boolean;
 }
 
 const declarationItems = [
@@ -39,7 +41,7 @@ const declarationItems = [
   },
 ];
 
-export default function DeclarationsSection({ form, prefix }: DeclarationsSectionProps) {
+export default function DeclarationsSection({ form, prefix, showSecondSignature = false }: DeclarationsSectionProps) {
   return (
     <>
       <FormSection title="Client Declarations" description="Please read and tick each declaration below">
@@ -82,13 +84,14 @@ export default function DeclarationsSection({ form, prefix }: DeclarationsSectio
           hereby undertake to indemnify the company and its affiliates and subsidiaries against any losses,
           liabilities, damages, claims, proceedings, cost or expenses of whatever that may be incurred by the
           company as a result of any issue arising from the honouring of my/our redemption requests and
-          instructions sent by electronic mail from my/our designated email address(es) stated above.
+          instructions sent by electronic mail from my/our designated <strong>email address(es)</strong> stated above.
         </div>
+
         <FormField
           control={form.control}
           name={`${prefix}.indemnityAccepted`}
           render={({ field }) => (
-            <FormItem className="flex items-start gap-3">
+            <FormItem className="flex items-start gap-3 mb-5">
               <FormControl>
                 <Checkbox
                   data-testid="checkbox-indemnity"
@@ -104,21 +107,53 @@ export default function DeclarationsSection({ form, prefix }: DeclarationsSectio
             </FormItem>
           )}
         />
+
+        <div className={`grid gap-4 ${showSecondSignature ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2"}`}>
+          <div className="space-y-3">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Account Holder's Signature</p>
+            <FormField control={form.control} name={`${prefix}.signatureName`} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name *</FormLabel>
+                <FormControl><Input data-testid="input-signature-name" placeholder="Type your full name as signature" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name={`${prefix}.signatureDate`} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date *</FormLabel>
+                <FormControl><Input data-testid="input-signature-date" type="date" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+          </div>
+          {showSecondSignature && (
+            <div className="space-y-3">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Account Holder's Signature (2nd)</p>
+              <FormField control={form.control} name={`${prefix}.secondSignatureName`} render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl><Input data-testid="input-second-signature-name" placeholder="Type full name as signature" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name={`${prefix}.secondSignatureDate`} render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl><Input data-testid="input-second-signature-date" type="date" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          )}
+        </div>
       </FormSection>
 
       <FormSection title="Politically Exposed Person (PEP) Status" description="Regulatory requirement">
-        <div className="p-4 rounded-md bg-muted/50 text-sm text-muted-foreground mb-4 leading-relaxed">
-          Politically Exposed Persons (PEP) are persons (and their relatives/close associates) who are or have
-          been in prominent public positions such as Heads of State, Governors, Local Government Chairpersons,
-          Politicians, Government Officials, Judicial Officials, Military Officials, Executives of Federal and
-          State Government Corporations & Parastatals, Political Party Officials, Monarchs and members of Royal
-          Families, etc.) in Nigeria and foreign countries.
-        </div>
         <FormField
           control={form.control}
           name={`${prefix}.isPoliticallyExposed`}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel className="text-sm font-medium">Are you a Politically Exposed Person (PEP)? *</FormLabel>
               <FormControl>
                 <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-6 pt-2">
@@ -136,6 +171,13 @@ export default function DeclarationsSection({ form, prefix }: DeclarationsSectio
             </FormItem>
           )}
         />
+        <div className="p-4 rounded-md bg-muted/50 text-xs text-muted-foreground leading-relaxed">
+          Politically Exposed Persons (PEP) are persons (and their relatives/close associates) who are or have
+          been in prominent public positions such as Heads of State, Governors, Local Government Chairpersons,
+          Politicians, Government Officials, Judicial Officials, Military Officials, Executives of Federal and
+          State Government Corporations & Parastatals, Political Party Officials, Monarchs and members of Royal
+          Families, etc.) in Nigeria and foreign countries.
+        </div>
       </FormSection>
     </>
   );
