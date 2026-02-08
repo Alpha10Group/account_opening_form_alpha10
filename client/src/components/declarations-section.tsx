@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Upload, X, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import FormSection from "./form-section";
 
 interface DeclarationsSectionProps {
@@ -40,6 +44,93 @@ const declarationItems = [
     text: "I/We declare that the information given on this form is complete, correct, and true to the best of my/our knowledge.",
   },
 ];
+
+function SignatureUpload({ form, fieldName, testId }: { form: any; fieldName: string; testId: string }) {
+  const [uploading, setUploading] = useState(false);
+  const { toast } = useToast();
+  const currentUrl = form.watch(fieldName);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Maximum file size is 2MB", variant: "destructive" });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("signature", file);
+      const res = await fetch("/api/upload-signature", { method: "POST", body: formData });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Upload failed");
+      }
+      const data = await res.json();
+      form.setValue(fieldName, data.url, { shouldValidate: true });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemove = () => {
+    form.setValue(fieldName, "", { shouldValidate: true });
+  };
+
+  return (
+    <div>
+      {currentUrl ? (
+        <div className="relative border rounded-md p-2 bg-muted/30 inline-block">
+          <img
+            src={currentUrl}
+            alt="Signature"
+            className="max-h-20 max-w-[200px] object-contain"
+            data-testid={`img-${testId}`}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-destructive text-destructive-foreground"
+            onClick={handleRemove}
+            data-testid={`button-remove-${testId}`}
+          >
+            <X className="w-3 h-3" />
+          </Button>
+        </div>
+      ) : (
+        <label className="cursor-pointer" data-testid={`label-upload-${testId}`}>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/jpg,image/webp"
+            className="hidden"
+            onChange={handleUpload}
+            disabled={uploading}
+            data-testid={`input-upload-${testId}`}
+          />
+          <div className="border-2 border-dashed rounded-md p-4 flex flex-col items-center gap-2 text-muted-foreground hover-elevate transition-colors">
+            {uploading ? (
+              <>
+                <Loader2 className="w-6 h-6 animate-spin" />
+                <span className="text-xs">Uploading...</span>
+              </>
+            ) : (
+              <>
+                <Upload className="w-6 h-6" />
+                <span className="text-xs">Click to upload signature image</span>
+                <span className="text-[10px]">PNG, JPG or WEBP (max 2MB)</span>
+              </>
+            )}
+          </div>
+        </label>
+      )}
+    </div>
+  );
+}
 
 export default function DeclarationsSection({ form, prefix, showSecondSignature = false }: DeclarationsSectionProps) {
   return (
@@ -108,8 +199,8 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
           )}
         />
 
-        <div className={`grid gap-4 ${showSecondSignature ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2"}`}>
-          <div className="space-y-3">
+        <div className={`grid gap-6 ${showSecondSignature ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2"}`}>
+          <div className="space-y-4">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Account Holder's Signature</p>
             <FormField control={form.control} name={`${prefix}.signatureName`} render={({ field }) => (
               <FormItem>
@@ -125,9 +216,13 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 <FormMessage />
               </FormItem>
             )} />
+            <div>
+              <p className="text-sm font-medium mb-2">Upload Signature</p>
+              <SignatureUpload form={form} fieldName={`${prefix}.signatureFileUrl`} testId="signature" />
+            </div>
           </div>
           {showSecondSignature && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Account Holder's Signature (2nd)</p>
               <FormField control={form.control} name={`${prefix}.secondSignatureName`} render={({ field }) => (
                 <FormItem>
@@ -143,6 +238,10 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                   <FormMessage />
                 </FormItem>
               )} />
+              <div>
+                <p className="text-sm font-medium mb-2">Upload Signature</p>
+                <SignatureUpload form={form} fieldName={`${prefix}.secondSignatureFileUrl`} testId="second-signature" />
+              </div>
             </div>
           )}
         </div>

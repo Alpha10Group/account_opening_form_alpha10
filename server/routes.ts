@@ -3,6 +3,36 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { individualFormSchema, jointFormSchema, corporateFormSchema } from "@shared/schema";
 import { z } from "zod";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+
+const uploadsDir = path.join(process.cwd(), "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const signatureStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadsDir),
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, `signature-${uniqueSuffix}${ext}`);
+  },
+});
+
+const upload = multer({
+  storage: signatureStorage,
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const allowed = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only PNG, JPG, and WEBP image files are allowed"));
+    }
+  },
+});
 
 function generateReferenceNumber(type: string): string {
   const prefix = type === "individual" ? "IND" : type === "joint" ? "JNT" : "CRP";
@@ -15,6 +45,21 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  app.use("/api/uploads", (await import("express")).default.static(uploadsDir));
+
+  app.post("/api/upload-signature", upload.single("signature"), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      const fileUrl = `/api/uploads/${req.file.filename}`;
+      res.json({ url: fileUrl, filename: req.file.filename });
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      res.status(500).json({ message: error.message || "Upload failed" });
+    }
+  });
+
   app.post("/api/applications", async (req, res) => {
     try {
       const body = req.body;

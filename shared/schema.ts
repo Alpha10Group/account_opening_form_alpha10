@@ -26,8 +26,10 @@ export const declarationsSchema = z.object({
   indemnityAccepted: z.boolean().refine(v => v === true, "You must accept the indemnity clause"),
   signatureName: z.string().min(1, "Signature name is required"),
   signatureDate: z.string().min(1, "Signature date is required"),
+  signatureFileUrl: z.string().optional(),
   secondSignatureName: z.string().optional(),
   secondSignatureDate: z.string().optional(),
+  secondSignatureFileUrl: z.string().optional(),
   isPoliticallyExposed: z.enum(["yes", "no"]),
 });
 
