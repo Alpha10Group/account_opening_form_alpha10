@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Upload, X, Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import FileUpload from "./file-upload";
 import FormSection from "./form-section";
 
 interface DeclarationsSectionProps {
@@ -45,94 +43,10 @@ const declarationItems = [
   },
 ];
 
-function SignatureUpload({ form, fieldName, testId }: { form: any; fieldName: string; testId: string }) {
-  const [uploading, setUploading] = useState(false);
-  const { toast } = useToast();
-  const currentUrl = form.watch(fieldName);
-
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 2 * 1024 * 1024) {
-      toast({ title: "File too large", description: "Maximum file size is 2MB", variant: "destructive" });
-      return;
-    }
-
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("signature", file);
-      const res = await fetch("/api/upload-signature", { method: "POST", body: formData });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Upload failed");
-      }
-      const data = await res.json();
-      form.setValue(fieldName, data.url, { shouldValidate: true });
-    } catch (err: any) {
-      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleRemove = () => {
-    form.setValue(fieldName, "", { shouldValidate: true });
-  };
-
-  return (
-    <div>
-      {currentUrl ? (
-        <div className="relative border rounded-md p-2 bg-muted/30 inline-block">
-          <img
-            src={currentUrl}
-            alt="Signature"
-            className="max-h-20 max-w-[200px] object-contain"
-            data-testid={`img-${testId}`}
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-destructive text-destructive-foreground"
-            onClick={handleRemove}
-            data-testid={`button-remove-${testId}`}
-          >
-            <X className="w-3 h-3" />
-          </Button>
-        </div>
-      ) : (
-        <label className="cursor-pointer" data-testid={`label-upload-${testId}`}>
-          <input
-            type="file"
-            accept="image/png,image/jpeg,image/jpg,image/webp"
-            className="hidden"
-            onChange={handleUpload}
-            disabled={uploading}
-            data-testid={`input-upload-${testId}`}
-          />
-          <div className="border-2 border-dashed rounded-md p-4 flex flex-col items-center gap-2 text-muted-foreground hover-elevate transition-colors">
-            {uploading ? (
-              <>
-                <Loader2 className="w-6 h-6 animate-spin" />
-                <span className="text-xs">Uploading...</span>
-              </>
-            ) : (
-              <>
-                <Upload className="w-6 h-6" />
-                <span className="text-xs">Click to upload signature image</span>
-                <span className="text-[10px]">PNG, JPG or WEBP (max 2MB)</span>
-              </>
-            )}
-          </div>
-        </label>
-      )}
-    </div>
-  );
-}
-
 export default function DeclarationsSection({ form, prefix, showSecondSignature = false }: DeclarationsSectionProps) {
+  const isPep = form.watch(`${prefix}.isPoliticallyExposed`);
+  const isFatca = form.watch(`${prefix}.isFatcaApplicable`);
+
   return (
     <>
       <FormSection title="Client Declarations" description="Please read and tick each declaration below">
@@ -218,7 +132,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
             )} />
             <div>
               <p className="text-sm font-medium mb-2">Upload Signature</p>
-              <SignatureUpload form={form} fieldName={`${prefix}.signatureFileUrl`} testId="signature" />
+              <FileUpload form={form} fieldName={`${prefix}.signatureFileUrl`} testId="signature" variant="signature" label="Click to upload signature" />
             </div>
           </div>
           {showSecondSignature && (
@@ -240,7 +154,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
               )} />
               <div>
                 <p className="text-sm font-medium mb-2">Upload Signature</p>
-                <SignatureUpload form={form} fieldName={`${prefix}.secondSignatureFileUrl`} testId="second-signature" />
+                <FileUpload form={form} fieldName={`${prefix}.secondSignatureFileUrl`} testId="second-signature" variant="signature" label="Click to upload signature" />
               </div>
             </div>
           )}
@@ -270,6 +184,15 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
             </FormItem>
           )}
         />
+        {isPep === "yes" && (
+          <FormField control={form.control} name={`${prefix}.pepDetails`} render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormLabel>Please provide details of your PEP status</FormLabel>
+              <FormControl><Textarea data-testid="input-pep-details" placeholder="Describe your political position, role, or relationship to a PEP" className="resize-none" {...field} /></FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+        )}
         <div className="p-4 rounded-md bg-muted/50 text-xs text-muted-foreground leading-relaxed">
           Politically Exposed Persons (PEP) are persons (and their relatives/close associates) who are or have
           been in prominent public positions such as Heads of State, Governors, Local Government Chairpersons,
@@ -277,6 +200,85 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
           State Government Corporations & Parastatals, Political Party Officials, Monarchs and members of Royal
           Families, etc.) in Nigeria and foreign countries.
         </div>
+      </FormSection>
+
+      <FormSection title="FATCA/CRS Self-Certification" description="Foreign Account Tax Compliance Act declaration">
+        <div className="p-4 rounded-md bg-muted/50 text-sm text-muted-foreground mb-4 leading-relaxed">
+          Under the Foreign Account Tax Compliance Act (FATCA) and the Common Reporting Standard (CRS),
+          financial institutions are required to identify customers who are tax residents of countries
+          other than Nigeria. Please confirm your tax residency status below.
+        </div>
+        <FormField
+          control={form.control}
+          name={`${prefix}.isFatcaApplicable`}
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormLabel className="text-sm font-medium">Are you a citizen or tax resident of any country other than Nigeria (including the United States)? *</FormLabel>
+              <FormControl>
+                <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-6 pt-2">
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="yes" id="fatca-yes" data-testid="radio-fatca-yes" />
+                    <label htmlFor="fatca-yes" className="text-sm">Yes</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="no" id="fatca-no" data-testid="radio-fatca-no" />
+                    <label htmlFor="fatca-no" className="text-sm">No</label>
+                  </div>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {isFatca === "yes" && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormField control={form.control} name={`${prefix}.fatcaCountry`} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country of Tax Residence</FormLabel>
+                <FormControl><Input data-testid="input-fatca-country" placeholder="e.g. United States" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name={`${prefix}.fatcaTin`} render={({ field }) => (
+              <FormItem>
+                <FormLabel>Foreign Tax Identification Number (TIN)</FormLabel>
+                <FormControl><Input data-testid="input-fatca-tin" placeholder="Enter foreign TIN" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+          </div>
+        )}
+      </FormSection>
+
+      <FormSection title="Terms and Conditions" description="Please read and accept">
+        <div className="p-4 rounded-md bg-muted/50 text-sm text-muted-foreground mb-4 leading-relaxed">
+          By ticking the box below, I/We confirm that I/we have read, understood and agree to be bound by the
+          company's Terms and Conditions governing the operation of the account(s) applied for. I/We understand that
+          the company reserves the right to amend these Terms and Conditions from time to time and that continued use
+          of the account shall constitute acceptance of such amendments. I/We also consent to the company collecting,
+          processing, and sharing my/our personal data in accordance with applicable data protection laws and
+          the company's privacy policy for the purposes of managing my/our account(s) and meeting regulatory requirements.
+        </div>
+        <FormField
+          control={form.control}
+          name={`${prefix}.termsAccepted`}
+          render={({ field }) => (
+            <FormItem className="flex items-start gap-3">
+              <FormControl>
+                <Checkbox
+                  data-testid="checkbox-terms"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="mt-0.5 shrink-0"
+                />
+              </FormControl>
+              <FormLabel className="text-sm font-normal leading-relaxed cursor-pointer">
+                I/We have read, understood and agree to be bound by the Terms and Conditions and Privacy Policy. *
+              </FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </FormSection>
     </>
   );

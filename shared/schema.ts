@@ -15,6 +15,16 @@ export const applications = pgTable("applications", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const refereeSchema = z.object({
+  fullName: z.string().min(1, "Referee name is required"),
+  address: z.string().min(1, "Referee address is required"),
+  phoneNumber: z.string().min(1, "Referee phone is required"),
+  email: z.string().optional(),
+  bankName: z.string().min(1, "Bank name is required"),
+  accountNumber: z.string().min(1, "Account number is required"),
+  relationship: z.string().min(1, "Relationship is required"),
+});
+
 export const declarationsSchema = z.object({
   declareAtLeast18: z.boolean().refine(v => v === true, "You must confirm you are at least 18 years"),
   declareMinInvestmentPeriod: z.boolean().refine(v => v === true, "You must accept the minimum investment period terms"),
@@ -24,6 +34,7 @@ export const declarationsSchema = z.object({
   declarePastPerformance: z.boolean().refine(v => v === true, "You must accept past performance terms"),
   declareInfoComplete: z.boolean().refine(v => v === true, "You must declare information is complete"),
   indemnityAccepted: z.boolean().refine(v => v === true, "You must accept the indemnity clause"),
+  termsAccepted: z.boolean().refine(v => v === true, "You must accept the terms and conditions"),
   signatureName: z.string().min(1, "Signature name is required"),
   signatureDate: z.string().min(1, "Signature date is required"),
   signatureFileUrl: z.string().optional(),
@@ -31,6 +42,10 @@ export const declarationsSchema = z.object({
   secondSignatureDate: z.string().optional(),
   secondSignatureFileUrl: z.string().optional(),
   isPoliticallyExposed: z.enum(["yes", "no"]),
+  pepDetails: z.string().optional(),
+  isFatcaApplicable: z.enum(["yes", "no"]),
+  fatcaCountry: z.string().optional(),
+  fatcaTin: z.string().optional(),
 });
 
 export const individualFormSchema = z.object({
@@ -40,27 +55,38 @@ export const individualFormSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   otherNames: z.string().optional(),
   dateOfBirth: z.string().min(1, "Date of birth is required"),
+  placeOfBirth: z.string().min(1, "Place of birth is required"),
   gender: z.enum(["male", "female"]),
   maritalStatus: z.enum(["single", "married", "divorced", "widowed"]),
   nationality: z.string().min(1, "Nationality is required"),
+  countryOfResidence: z.string().min(1, "Country of residence is required"),
   stateOfOrigin: z.string().min(1, "State of origin is required"),
   localGovernment: z.string().min(1, "Local government is required"),
   homeTown: z.string().min(1, "Home town is required"),
   religion: z.string().optional(),
   motherMaidenName: z.string().min(1, "Mother's maiden name is required"),
 
+  passportPhotoUrl: z.string().optional(),
+
   residentialAddress: z.string().min(1, "Residential address is required"),
   city: z.string().min(1, "City is required"),
   state: z.string().min(1, "State is required"),
   country: z.string().min(1, "Country is required"),
+  mailingAddress: z.string().optional(),
+  mailingCity: z.string().optional(),
+  mailingState: z.string().optional(),
+  mailingCountry: z.string().optional(),
   phoneNumber: z.string().min(1, "Phone number is required"),
   alternativePhone: z.string().optional(),
   email: z.string().email("Invalid email address"),
+  preferredCommunication: z.enum(["email", "sms", "both"]),
 
   identificationType: z.enum(["national_id", "drivers_license", "international_passport", "voters_card"]),
   identificationNumber: z.string().min(1, "ID number is required"),
   identificationIssueDate: z.string().min(1, "Issue date is required"),
   identificationExpiryDate: z.string().min(1, "Expiry date is required"),
+  idDocumentUrl: z.string().optional(),
+  proofOfAddressUrl: z.string().optional(),
 
   bvn: z.string().min(11, "BVN must be 11 digits").max(11, "BVN must be 11 digits"),
   tin: z.string().optional(),
@@ -74,12 +100,18 @@ export const individualFormSchema = z.object({
 
   accountCurrency: z.enum(["NGN", "USD", "GBP", "EUR"]),
   accountPurpose: z.string().min(1, "Purpose of account is required"),
+  initialDepositAmount: z.string().optional(),
 
   nextOfKinFullName: z.string().min(1, "Next of kin name is required"),
   nextOfKinRelationship: z.string().min(1, "Relationship is required"),
   nextOfKinPhone: z.string().min(1, "Phone number is required"),
   nextOfKinAddress: z.string().min(1, "Address is required"),
   nextOfKinEmail: z.string().optional(),
+  nextOfKinDateOfBirth: z.string().optional(),
+  nextOfKinGender: z.enum(["male", "female"]).optional(),
+
+  referee1: refereeSchema,
+  referee2: refereeSchema,
 
   declarations: declarationsSchema,
 });
@@ -90,20 +122,29 @@ export const jointAccountHolderSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   otherNames: z.string().optional(),
   dateOfBirth: z.string().min(1, "Date of birth is required"),
+  placeOfBirth: z.string().optional(),
   gender: z.enum(["male", "female"]),
   maritalStatus: z.enum(["single", "married", "divorced", "widowed"]),
   nationality: z.string().min(1, "Nationality is required"),
   stateOfOrigin: z.string().min(1, "State of origin is required"),
+  motherMaidenName: z.string().optional(),
   phoneNumber: z.string().min(1, "Phone number is required"),
   email: z.string().email("Invalid email"),
   residentialAddress: z.string().min(1, "Address is required"),
   city: z.string().min(1, "City is required"),
   state: z.string().min(1, "State is required"),
+  country: z.string().optional(),
+  passportPhotoUrl: z.string().optional(),
   identificationType: z.enum(["national_id", "drivers_license", "international_passport", "voters_card"]),
   identificationNumber: z.string().min(1, "ID number is required"),
+  identificationIssueDate: z.string().optional(),
+  identificationExpiryDate: z.string().optional(),
+  idDocumentUrl: z.string().optional(),
   bvn: z.string().min(11, "BVN must be 11 digits").max(11, "BVN must be 11 digits"),
+  tin: z.string().optional(),
   occupation: z.string().min(1, "Occupation is required"),
   employerName: z.string().optional(),
+  employerAddress: z.string().optional(),
   annualIncome: z.string().min(1, "Annual income is required"),
   sourceOfFunds: z.string().min(1, "Source of funds is required"),
 });
@@ -120,6 +161,11 @@ export const jointFormSchema = z.object({
   nextOfKinRelationship: z.string().min(1, "Relationship is required"),
   nextOfKinPhone: z.string().min(1, "Phone number is required"),
   nextOfKinAddress: z.string().min(1, "Address is required"),
+  nextOfKinEmail: z.string().optional(),
+  nextOfKinDateOfBirth: z.string().optional(),
+  proofOfAddressUrl: z.string().optional(),
+  referee1: refereeSchema,
+  referee2: refereeSchema,
   declarations: declarationsSchema,
 });
 
@@ -134,6 +180,7 @@ export const directorSchema = z.object({
   bvn: z.string().min(11, "BVN must be 11 digits").max(11, "BVN must be 11 digits"),
   identificationType: z.enum(["national_id", "drivers_license", "international_passport", "voters_card"]),
   identificationNumber: z.string().min(1, "ID number is required"),
+  passportPhotoUrl: z.string().optional(),
 });
 
 export const signatorySchema = z.object({
@@ -145,6 +192,7 @@ export const signatorySchema = z.object({
   identificationType: z.enum(["national_id", "drivers_license", "international_passport", "voters_card"]),
   identificationNumber: z.string().min(1, "ID number is required"),
   signatureMandate: z.string().min(1, "Mandate is required"),
+  signatureFileUrl: z.string().optional(),
 });
 
 export const corporateFormSchema = z.object({
@@ -162,16 +210,26 @@ export const corporateFormSchema = z.object({
   companyPhone: z.string().min(1, "Phone number is required"),
   companyEmail: z.string().email("Invalid email address"),
   website: z.string().optional(),
+  companyLogoUrl: z.string().optional(),
 
   accountCurrency: z.enum(["NGN", "USD", "GBP", "EUR"]),
   accountPurpose: z.string().min(1, "Purpose is required"),
   expectedMonthlyTurnover: z.string().min(1, "Expected turnover is required"),
   sourceOfFunds: z.string().min(1, "Source of funds is required"),
+  initialDepositAmount: z.string().optional(),
 
   directors: z.array(directorSchema).min(1, "At least one director is required"),
   signatories: z.array(signatorySchema).min(1, "At least one signatory is required"),
 
   operatingMandate: z.enum(["any_one", "any_two", "all_signatories"]),
+
+  cacDocumentUrl: z.string().optional(),
+  memorandumUrl: z.string().optional(),
+  boardResolutionUrl: z.string().optional(),
+  proofOfAddressUrl: z.string().optional(),
+
+  referee1: refereeSchema,
+  referee2: refereeSchema,
 
   declarations: declarationsSchema,
 });

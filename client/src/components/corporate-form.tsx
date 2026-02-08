@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Plus, Trash2 } from "lucide-react";
 import FormSection from "./form-section";
 import DeclarationsSection from "./declarations-section";
+import FileUpload from "./file-upload";
+import RefereeSection from "./referee-section";
 
 interface CorporateFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -38,20 +40,30 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
       companyPhone: "",
       companyEmail: "",
       website: "",
+      companyLogoUrl: "",
       accountCurrency: undefined,
       accountPurpose: "",
       expectedMonthlyTurnover: "",
       sourceOfFunds: "",
+      initialDepositAmount: "",
       directors: [{
         fullName: "", designation: "", dateOfBirth: "", nationality: "",
         residentialAddress: "", phoneNumber: "", email: "", bvn: "",
         identificationType: undefined as any, identificationNumber: "",
+        passportPhotoUrl: "",
       }],
       signatories: [{
         fullName: "", designation: "", phoneNumber: "", email: "", bvn: "",
         identificationType: undefined as any, identificationNumber: "", signatureMandate: "",
+        signatureFileUrl: "",
       }],
       operatingMandate: undefined,
+      cacDocumentUrl: "",
+      memorandumUrl: "",
+      boardResolutionUrl: "",
+      proofOfAddressUrl: "",
+      referee1: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
+      referee2: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
       declarations: {
         declareAtLeast18: false,
         declareMinInvestmentPeriod: false,
@@ -61,6 +73,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
         declarePastPerformance: false,
         declareInfoComplete: false,
         indemnityAccepted: false,
+        termsAccepted: false,
         signatureName: "",
         signatureDate: "",
         signatureFileUrl: "",
@@ -68,6 +81,10 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
         secondSignatureDate: "",
         secondSignatureFileUrl: "",
         isPoliticallyExposed: undefined as any,
+        pepDetails: "",
+        isFatcaApplicable: undefined as any,
+        fatcaCountry: "",
+        fatcaTin: "",
       },
     },
   });
@@ -201,6 +218,12 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+            <div className="sm:col-span-2">
+              <FormItem>
+                <FormLabel>Company Logo</FormLabel>
+                <FileUpload form={form} fieldName="companyLogoUrl" testId="company-logo" variant="photo" label="Upload company logo" />
+              </FormItem>
+            </div>
           </div>
         </FormSection>
 
@@ -266,6 +289,13 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
                     <SelectItem value="others">Others</SelectItem>
                   </SelectContent>
                 </Select>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="initialDepositAmount" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Initial Deposit Amount</FormLabel>
+                <FormControl><Input data-testid="input-corp-initial-deposit" placeholder="Enter amount" {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
@@ -371,6 +401,12 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
                     </FormItem>
                   )} />
                 </div>
+                <div>
+                  <FormItem>
+                    <FormLabel>Passport Photo</FormLabel>
+                    <FileUpload form={form} fieldName={`directors.${index}.passportPhotoUrl`} testId={`director-photo-${index}`} variant="photo" label="Upload photo" />
+                  </FormItem>
+                </div>
               </div>
               {index < directorFields.length - 1 && <div className="border-b mt-6" />}
             </div>
@@ -384,6 +420,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
               fullName: "", designation: "", dateOfBirth: "", nationality: "",
               residentialAddress: "", phoneNumber: "", email: "", bvn: "",
               identificationType: "national_id", identificationNumber: "",
+              passportPhotoUrl: "",
             })}
             data-testid="button-add-director"
           >
@@ -481,6 +518,12 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
                     <FormMessage />
                   </FormItem>
                 )} />
+                <div>
+                  <FormItem>
+                    <FormLabel>Signature</FormLabel>
+                    <FileUpload form={form} fieldName={`signatories.${index}.signatureFileUrl`} testId={`signatory-signature-${index}`} variant="signature" label="Upload signature" />
+                  </FormItem>
+                </div>
               </div>
               {index < signatoryFields.length - 1 && <div className="border-b mt-6" />}
             </div>
@@ -493,11 +536,41 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
             onClick={() => addSignatory({
               fullName: "", designation: "", phoneNumber: "", email: "", bvn: "",
               identificationType: "national_id", identificationNumber: "", signatureMandate: "",
+              signatureFileUrl: "",
             })}
             data-testid="button-add-signatory"
           >
             <Plus className="w-4 h-4" /> Add Signatory
           </Button>
+        </FormSection>
+
+        <FormSection title="Document Uploads" description="Required corporate documents">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <FormItem>
+                <FormLabel>CAC Certificate</FormLabel>
+                <FileUpload form={form} fieldName="cacDocumentUrl" testId="cac-document" variant="document" label="Upload CAC Certificate" />
+              </FormItem>
+            </div>
+            <div>
+              <FormItem>
+                <FormLabel>Memorandum & Articles of Association</FormLabel>
+                <FileUpload form={form} fieldName="memorandumUrl" testId="memorandum" variant="document" label="Upload Memorandum & Articles" />
+              </FormItem>
+            </div>
+            <div>
+              <FormItem>
+                <FormLabel>Board Resolution</FormLabel>
+                <FileUpload form={form} fieldName="boardResolutionUrl" testId="board-resolution" variant="document" label="Upload Board Resolution" />
+              </FormItem>
+            </div>
+            <div>
+              <FormItem>
+                <FormLabel>Proof of Business Address</FormLabel>
+                <FileUpload form={form} fieldName="proofOfAddressUrl" testId="proof-of-address" variant="document" label="Upload Proof of Address" />
+              </FormItem>
+            </div>
+          </div>
         </FormSection>
 
         <FormSection title="Operating Mandate" description="How the account will be operated">
@@ -524,6 +597,9 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
             </FormItem>
           )} />
         </FormSection>
+
+        <RefereeSection form={form} prefix="referee1" refereeNumber={1} testPrefix="corp" />
+        <RefereeSection form={form} prefix="referee2" refereeNumber={2} testPrefix="corp" />
 
         <DeclarationsSection form={form} prefix="declarations" />
 

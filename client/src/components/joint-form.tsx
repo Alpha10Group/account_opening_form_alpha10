@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send } from "lucide-react";
 import FormSection from "./form-section";
 import DeclarationsSection from "./declarations-section";
+import FileUpload from "./file-upload";
+import RefereeSection from "./referee-section";
 
 interface JointFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -66,6 +68,13 @@ function HolderFields({ prefix, form }: { prefix: "primaryHolder" | "secondaryHo
             <FormMessage />
           </FormItem>
         )} />
+        <FormField control={form.control} name={`${prefix}.placeOfBirth`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Place of Birth</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-placeOfBirth`} placeholder="Enter place of birth" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
         <FormField control={form.control} name={`${prefix}.gender`} render={({ field }) => (
           <FormItem>
             <FormLabel>Gender *</FormLabel>
@@ -112,6 +121,13 @@ function HolderFields({ prefix, form }: { prefix: "primaryHolder" | "secondaryHo
             <FormMessage />
           </FormItem>
         )} />
+        <FormField control={form.control} name={`${prefix}.motherMaidenName`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Mother's Maiden Name</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-motherMaidenName`} placeholder="Enter mother's maiden name" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
         <FormField control={form.control} name={`${prefix}.phoneNumber`} render={({ field }) => (
           <FormItem>
             <FormLabel>Phone Number *</FormLabel>
@@ -149,6 +165,13 @@ function HolderFields({ prefix, form }: { prefix: "primaryHolder" | "secondaryHo
             <FormMessage />
           </FormItem>
         )} />
+        <FormField control={form.control} name={`${prefix}.country`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Country</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-country`} placeholder="Enter country" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
         <FormField control={form.control} name={`${prefix}.identificationType`} render={({ field }) => (
           <FormItem>
             <FormLabel>ID Type *</FormLabel>
@@ -171,10 +194,48 @@ function HolderFields({ prefix, form }: { prefix: "primaryHolder" | "secondaryHo
             <FormMessage />
           </FormItem>
         )} />
+        <FormField control={form.control} name={`${prefix}.identificationIssueDate`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>ID Issue Date</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-identificationIssueDate`} type="date" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.identificationExpiryDate`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>ID Expiry Date</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-identificationExpiryDate`} type="date" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <div className="sm:col-span-2 lg:col-span-3">
+          <FormField control={form.control} name={`${prefix}.idDocumentUrl`} render={() => (
+            <FormItem>
+              <FormLabel>ID Document Upload</FormLabel>
+              <FormControl>
+                <FileUpload
+                  form={form}
+                  fieldName={`${prefix}.idDocumentUrl`}
+                  testId={`${prefix}-idDocumentUrl`}
+                  label="Upload ID document"
+                  variant="document"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+        </div>
         <FormField control={form.control} name={`${prefix}.bvn`} render={({ field }) => (
           <FormItem>
             <FormLabel>BVN *</FormLabel>
             <FormControl><Input data-testid={`input-${prefix}-bvn`} placeholder="11-digit BVN" maxLength={11} {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.tin`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>TIN</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-tin`} placeholder="Tax Identification Number" {...field} /></FormControl>
             <FormMessage />
           </FormItem>
         )} />
@@ -189,6 +250,13 @@ function HolderFields({ prefix, form }: { prefix: "primaryHolder" | "secondaryHo
           <FormItem>
             <FormLabel>Employer Name</FormLabel>
             <FormControl><Input data-testid={`input-${prefix}-employer`} placeholder="Employer name" {...field} /></FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+        <FormField control={form.control} name={`${prefix}.employerAddress`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Employer Address</FormLabel>
+            <FormControl><Input data-testid={`input-${prefix}-employerAddress`} placeholder="Employer address" {...field} /></FormControl>
             <FormMessage />
           </FormItem>
         )} />
@@ -225,6 +293,23 @@ function HolderFields({ prefix, form }: { prefix: "primaryHolder" | "secondaryHo
           </FormItem>
         )} />
       </div>
+      <div className="mt-4">
+        <FormField control={form.control} name={`${prefix}.passportPhotoUrl`} render={() => (
+          <FormItem>
+            <FormLabel>Passport Photo</FormLabel>
+            <FormControl>
+              <FileUpload
+                form={form}
+                fieldName={`${prefix}.passportPhotoUrl`}
+                testId={`${prefix}-passportPhotoUrl`}
+                label="Upload passport photo"
+                variant="photo"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+      </div>
     </FormSection>
   );
 }
@@ -241,22 +326,43 @@ export default function JointForm({ onSuccess }: JointFormProps) {
       operatingMandate: undefined,
       primaryHolder: {
         title: "", surname: "", firstName: "", otherNames: "", dateOfBirth: "",
+        placeOfBirth: "",
         gender: undefined, maritalStatus: undefined, nationality: "", stateOfOrigin: "",
+        motherMaidenName: "",
         phoneNumber: "", email: "", residentialAddress: "", city: "", state: "",
-        identificationType: undefined, identificationNumber: "", bvn: "",
-        occupation: "", employerName: "", annualIncome: "", sourceOfFunds: "",
+        country: "",
+        passportPhotoUrl: "",
+        identificationType: undefined, identificationNumber: "",
+        identificationIssueDate: "", identificationExpiryDate: "",
+        idDocumentUrl: "",
+        bvn: "", tin: "",
+        occupation: "", employerName: "", employerAddress: "",
+        annualIncome: "", sourceOfFunds: "",
       },
       secondaryHolder: {
         title: "", surname: "", firstName: "", otherNames: "", dateOfBirth: "",
+        placeOfBirth: "",
         gender: undefined, maritalStatus: undefined, nationality: "", stateOfOrigin: "",
+        motherMaidenName: "",
         phoneNumber: "", email: "", residentialAddress: "", city: "", state: "",
-        identificationType: undefined, identificationNumber: "", bvn: "",
-        occupation: "", employerName: "", annualIncome: "", sourceOfFunds: "",
+        country: "",
+        passportPhotoUrl: "",
+        identificationType: undefined, identificationNumber: "",
+        identificationIssueDate: "", identificationExpiryDate: "",
+        idDocumentUrl: "",
+        bvn: "", tin: "",
+        occupation: "", employerName: "", employerAddress: "",
+        annualIncome: "", sourceOfFunds: "",
       },
       nextOfKinFullName: "",
       nextOfKinRelationship: "",
       nextOfKinPhone: "",
       nextOfKinAddress: "",
+      nextOfKinEmail: "",
+      nextOfKinDateOfBirth: "",
+      proofOfAddressUrl: "",
+      referee1: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
+      referee2: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
       declarations: {
         declareAtLeast18: false,
         declareMinInvestmentPeriod: false,
@@ -266,6 +372,7 @@ export default function JointForm({ onSuccess }: JointFormProps) {
         declarePastPerformance: false,
         declareInfoComplete: false,
         indemnityAccepted: false,
+        termsAccepted: false,
         signatureName: "",
         signatureDate: "",
         signatureFileUrl: "",
@@ -273,6 +380,10 @@ export default function JointForm({ onSuccess }: JointFormProps) {
         secondSignatureDate: "",
         secondSignatureFileUrl: "",
         isPoliticallyExposed: undefined as any,
+        pepDetails: "",
+        isFatcaApplicable: undefined as any,
+        fatcaCountry: "",
+        fatcaTin: "",
       },
     },
   });
@@ -398,6 +509,20 @@ export default function JointForm({ onSuccess }: JointFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+            <FormField control={form.control} name="nextOfKinEmail" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl><Input data-testid="input-joint-nok-email" type="email" placeholder="email@example.com" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="nextOfKinDateOfBirth" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date of Birth</FormLabel>
+                <FormControl><Input data-testid="input-joint-nok-dob" type="date" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <div className="sm:col-span-2">
               <FormField control={form.control} name="nextOfKinAddress" render={({ field }) => (
                 <FormItem>
@@ -409,6 +534,27 @@ export default function JointForm({ onSuccess }: JointFormProps) {
             </div>
           </div>
         </FormSection>
+
+        <FormSection title="Document Uploads" description="Upload proof of address for the joint account">
+          <FormField control={form.control} name="proofOfAddressUrl" render={() => (
+            <FormItem>
+              <FormLabel>Proof of Address</FormLabel>
+              <FormControl>
+                <FileUpload
+                  form={form}
+                  fieldName="proofOfAddressUrl"
+                  testId="joint-proofOfAddressUrl"
+                  label="Upload proof of address"
+                  variant="document"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+        </FormSection>
+
+        <RefereeSection form={form} prefix="referee1" refereeNumber={1} testPrefix="joint" />
+        <RefereeSection form={form} prefix="referee2" refereeNumber={2} testPrefix="joint" />
 
         <DeclarationsSection form={form} prefix="declarations" showSecondSignature />
 

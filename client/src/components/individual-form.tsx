@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send } from "lucide-react";
 import FormSection from "./form-section";
 import DeclarationsSection from "./declarations-section";
+import FileUpload from "./file-upload";
+import RefereeSection from "./referee-section";
 
 interface IndividualFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -30,25 +32,35 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
       firstName: "",
       otherNames: "",
       dateOfBirth: "",
+      placeOfBirth: "",
       gender: undefined,
       maritalStatus: undefined,
       nationality: "",
+      countryOfResidence: "",
       stateOfOrigin: "",
       localGovernment: "",
       homeTown: "",
       religion: "",
       motherMaidenName: "",
+      passportPhotoUrl: "",
       residentialAddress: "",
       city: "",
       state: "",
       country: "",
+      mailingAddress: "",
+      mailingCity: "",
+      mailingState: "",
+      mailingCountry: "",
       phoneNumber: "",
       alternativePhone: "",
       email: "",
+      preferredCommunication: undefined,
       identificationType: undefined,
       identificationNumber: "",
       identificationIssueDate: "",
       identificationExpiryDate: "",
+      idDocumentUrl: "",
+      proofOfAddressUrl: "",
       bvn: "",
       tin: "",
       employmentStatus: undefined,
@@ -59,11 +71,32 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
       sourceOfFunds: "",
       accountCurrency: undefined,
       accountPurpose: "",
+      initialDepositAmount: "",
       nextOfKinFullName: "",
       nextOfKinRelationship: "",
       nextOfKinPhone: "",
       nextOfKinAddress: "",
       nextOfKinEmail: "",
+      nextOfKinDateOfBirth: "",
+      nextOfKinGender: undefined,
+      referee1: {
+        fullName: "",
+        address: "",
+        phoneNumber: "",
+        email: "",
+        bankName: "",
+        accountNumber: "",
+        relationship: "",
+      },
+      referee2: {
+        fullName: "",
+        address: "",
+        phoneNumber: "",
+        email: "",
+        bankName: "",
+        accountNumber: "",
+        relationship: "",
+      },
       declarations: {
         declareAtLeast18: false,
         declareMinInvestmentPeriod: false,
@@ -73,6 +106,7 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
         declarePastPerformance: false,
         declareInfoComplete: false,
         indemnityAccepted: false,
+        termsAccepted: false,
         signatureName: "",
         signatureDate: "",
         signatureFileUrl: "",
@@ -80,6 +114,10 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
         secondSignatureDate: "",
         secondSignatureFileUrl: "",
         isPoliticallyExposed: undefined as any,
+        pepDetails: "",
+        isFatcaApplicable: undefined as any,
+        fatcaCountry: "",
+        fatcaTin: "",
       },
     },
   });
@@ -152,6 +190,13 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+            <FormField control={form.control} name="placeOfBirth" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Place of Birth *</FormLabel>
+                <FormControl><Input data-testid="input-placeOfBirth" placeholder="Enter place of birth" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField control={form.control} name="gender" render={({ field }) => (
               <FormItem>
                 <FormLabel>Gender *</FormLabel>
@@ -191,6 +236,13 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+            <FormField control={form.control} name="countryOfResidence" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country of Residence *</FormLabel>
+                <FormControl><Input data-testid="input-countryOfResidence" placeholder="Enter country of residence" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField control={form.control} name="stateOfOrigin" render={({ field }) => (
               <FormItem>
                 <FormLabel>State of Origin *</FormLabel>
@@ -226,6 +278,19 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+          </div>
+          <div className="mt-4">
+            <FormLabel>Passport Photograph</FormLabel>
+            <div className="mt-1">
+              <FileUpload
+                form={form}
+                fieldName="passportPhotoUrl"
+                testId="passportPhotoUrl"
+                label="Upload photo"
+                description="PNG, JPG (max 2MB)"
+                variant="photo"
+              />
+            </div>
           </div>
         </FormSection>
 
@@ -282,6 +347,55 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+            <FormField control={form.control} name="preferredCommunication" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Communication Preference *</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl><SelectTrigger data-testid="select-preferredCommunication"><SelectValue placeholder="Select preference" /></SelectTrigger></FormControl>
+                  <SelectContent>
+                    <SelectItem value="email">Email</SelectItem>
+                    <SelectItem value="sms">SMS</SelectItem>
+                    <SelectItem value="both">Both</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )} />
+          </div>
+        </FormSection>
+
+        <FormSection title="Mailing / Correspondence Address" description="Optional - if different from residential address">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="sm:col-span-2">
+              <FormField control={form.control} name="mailingAddress" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mailing Address</FormLabel>
+                  <FormControl><Textarea data-testid="input-mailingAddress" placeholder="Enter mailing address" className="resize-none" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+            <FormField control={form.control} name="mailingCity" render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl><Input data-testid="input-mailingCity" placeholder="Enter city" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="mailingState" render={({ field }) => (
+              <FormItem>
+                <FormLabel>State</FormLabel>
+                <FormControl><Input data-testid="input-mailingState" placeholder="Enter state" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="mailingCountry" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country</FormLabel>
+                <FormControl><Input data-testid="input-mailingCountry" placeholder="Enter country" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
           </div>
         </FormSection>
 
@@ -323,6 +437,34 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div>
+              <FormLabel>ID Document Scan</FormLabel>
+              <div className="mt-1">
+                <FileUpload
+                  form={form}
+                  fieldName="idDocumentUrl"
+                  testId="idDocumentUrl"
+                  label="Upload ID document"
+                  description="PNG, JPG or PDF (max 2MB)"
+                  variant="document"
+                />
+              </div>
+            </div>
+            <div>
+              <FormLabel>Proof of Address</FormLabel>
+              <div className="mt-1">
+                <FileUpload
+                  form={form}
+                  fieldName="proofOfAddressUrl"
+                  testId="proofOfAddressUrl"
+                  label="Upload proof of address"
+                  description="Utility bill, bank statement (max 2MB)"
+                  variant="document"
+                />
+              </div>
+            </div>
           </div>
         </FormSection>
 
@@ -453,6 +595,13 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+            <FormField control={form.control} name="initialDepositAmount" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Initial Deposit Amount</FormLabel>
+                <FormControl><Input data-testid="input-initialDepositAmount" placeholder="Enter amount" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
           </div>
         </FormSection>
 
@@ -488,8 +637,8 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
             )} />
             <FormField control={form.control} name="nextOfKinEmail" render={({ field }) => (
               <FormItem>
-                <FormLabel>Email Address</FormLabel>
-                <FormControl><Input data-testid="input-nok-email" type="email" placeholder="Email address" {...field} /></FormControl>
+                <FormLabel>Email</FormLabel>
+                <FormControl><Input data-testid="input-nok-email" type="email" placeholder="example@email.com" {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
@@ -497,27 +646,56 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
               <FormField control={form.control} name="nextOfKinAddress" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Address *</FormLabel>
-                  <FormControl><Textarea data-testid="input-nok-address" placeholder="Enter full address" className="resize-none" {...field} /></FormControl>
+                  <FormControl><Textarea data-testid="input-nok-address" placeholder="Enter next of kin address" className="resize-none" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
             </div>
+            <FormField control={form.control} name="nextOfKinDateOfBirth" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date of Birth</FormLabel>
+                <FormControl><Input data-testid="input-nextOfKinDateOfBirth" type="date" {...field} /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="nextOfKinGender" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <FormControl>
+                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4 pt-2">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="male" id="nok-male" data-testid="radio-nextOfKinGender-male" />
+                      <label htmlFor="nok-male" className="text-sm">Male</label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="female" id="nok-female" data-testid="radio-nextOfKinGender-female" />
+                      <label htmlFor="nok-female" className="text-sm">Female</label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
           </div>
         </FormSection>
 
+        <RefereeSection form={form} prefix="referee1" refereeNumber={1} />
+        <RefereeSection form={form} prefix="referee2" refereeNumber={2} />
+
         <DeclarationsSection form={form} prefix="declarations" />
 
-        <div className="flex justify-end gap-3 pt-2 pb-8">
-          <Button
-            type="submit"
-            disabled={submitMutation.isPending}
-            className="gap-2 min-w-[180px]"
-            data-testid="button-submit-individual"
-          >
+        <div className="flex justify-end gap-4 pt-6 pb-8">
+          <Button type="submit" disabled={submitMutation.isPending} data-testid="button-submit">
             {submitMutation.isPending ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</>
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Submitting...
+              </>
             ) : (
-              <><Send className="w-4 h-4" /> Submit Application</>
+              <>
+                <Send className="w-4 h-4 mr-2" />
+                Submit Application
+              </>
             )}
           </Button>
         </div>
