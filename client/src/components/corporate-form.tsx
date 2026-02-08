@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Plus, Trash2 } from "lucide-react";
 import FormSection from "./form-section";
+import DeclarationsSection from "./declarations-section";
 
 interface CorporateFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -51,7 +52,17 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
         identificationType: undefined as any, identificationNumber: "", signatureMandate: "",
       }],
       operatingMandate: undefined,
-      signatureDeclaration: false,
+      declarations: {
+        declareAtLeast18: false,
+        declareMinInvestmentPeriod: false,
+        declareApplicationOnOwnBehalf: false,
+        declareEstatementRisk: false,
+        declareMaterialChange: false,
+        declarePastPerformance: false,
+        declareInfoComplete: false,
+        indemnityAccepted: false,
+        isPoliticallyExposed: undefined as any,
+      },
     },
   });
 
@@ -508,34 +519,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
           )} />
         </FormSection>
 
-        <FormSection title="Declaration" description="Please read and accept the corporate declaration">
-          <div className="p-4 rounded-md bg-muted/50 text-sm text-muted-foreground mb-4 leading-relaxed">
-            We, the undersigned, hereby apply for the opening of a corporate account with the bank.
-            We certify that the information provided in this application is true and correct. We authorize
-            the bank to verify any information provided and to obtain references as necessary. We agree
-            to be bound by the bank's terms and conditions governing corporate accounts. We confirm
-            that all directors and authorized signatories listed are duly authorized to act on behalf
-            of the company. We undertake to provide any additional documentation that may be required
-            by the bank for regulatory compliance purposes.
-          </div>
-          <FormField control={form.control} name="signatureDeclaration" render={({ field }) => (
-            <FormItem className="flex items-start gap-3">
-              <FormControl>
-                <Checkbox
-                  data-testid="checkbox-corp-declaration"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  className="mt-0.5"
-                />
-              </FormControl>
-              <FormLabel className="text-sm font-normal leading-relaxed cursor-pointer">
-                On behalf of the company, we confirm that we have read, understood and agree to the above declaration
-                and the bank's terms and conditions for corporate accounts. *
-              </FormLabel>
-              <FormMessage />
-            </FormItem>
-          )} />
-        </FormSection>
+        <DeclarationsSection form={form} prefix="declarations" />
 
         <div className="flex justify-end gap-3 pt-2 pb-8">
           <Button

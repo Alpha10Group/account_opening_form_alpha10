@@ -15,6 +15,18 @@ export const applications = pgTable("applications", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const declarationsSchema = z.object({
+  declareAtLeast18: z.boolean().refine(v => v === true, "You must confirm you are at least 18 years"),
+  declareMinInvestmentPeriod: z.boolean().refine(v => v === true, "You must accept the minimum investment period terms"),
+  declareApplicationOnOwnBehalf: z.boolean().refine(v => v === true, "You must confirm this declaration"),
+  declareEstatementRisk: z.boolean().refine(v => v === true, "You must accept e-statement terms"),
+  declareMaterialChange: z.boolean().refine(v => v === true, "You must accept material change terms"),
+  declarePastPerformance: z.boolean().refine(v => v === true, "You must accept past performance terms"),
+  declareInfoComplete: z.boolean().refine(v => v === true, "You must declare information is complete"),
+  indemnityAccepted: z.boolean().refine(v => v === true, "You must accept the indemnity clause"),
+  isPoliticallyExposed: z.enum(["yes", "no"]),
+});
+
 export const individualFormSchema = z.object({
   accountType: z.literal("individual"),
   title: z.string().min(1, "Title is required"),
@@ -63,7 +75,7 @@ export const individualFormSchema = z.object({
   nextOfKinAddress: z.string().min(1, "Address is required"),
   nextOfKinEmail: z.string().optional(),
 
-  signatureDeclaration: z.boolean().refine(v => v === true, "You must accept the declaration"),
+  declarations: declarationsSchema,
 });
 
 export const jointAccountHolderSchema = z.object({
@@ -102,7 +114,7 @@ export const jointFormSchema = z.object({
   nextOfKinRelationship: z.string().min(1, "Relationship is required"),
   nextOfKinPhone: z.string().min(1, "Phone number is required"),
   nextOfKinAddress: z.string().min(1, "Address is required"),
-  signatureDeclaration: z.boolean().refine(v => v === true, "You must accept the declaration"),
+  declarations: declarationsSchema,
 });
 
 export const directorSchema = z.object({
@@ -155,7 +167,7 @@ export const corporateFormSchema = z.object({
 
   operatingMandate: z.enum(["any_one", "any_two", "all_signatories"]),
 
-  signatureDeclaration: z.boolean().refine(v => v === true, "You must accept the declaration"),
+  declarations: declarationsSchema,
 });
 
 export const insertApplicationSchema = createInsertSchema(applications).omit({

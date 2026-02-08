@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send } from "lucide-react";
 import FormSection from "./form-section";
+import DeclarationsSection from "./declarations-section";
 
 interface IndividualFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -63,7 +64,17 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
       nextOfKinPhone: "",
       nextOfKinAddress: "",
       nextOfKinEmail: "",
-      signatureDeclaration: false,
+      declarations: {
+        declareAtLeast18: false,
+        declareMinInvestmentPeriod: false,
+        declareApplicationOnOwnBehalf: false,
+        declareEstatementRisk: false,
+        declareMaterialChange: false,
+        declarePastPerformance: false,
+        declareInfoComplete: false,
+        indemnityAccepted: false,
+        isPoliticallyExposed: undefined as any,
+      },
     },
   });
 
@@ -488,31 +499,7 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
           </div>
         </FormSection>
 
-        <FormSection title="Declaration" description="Please read and accept the declaration">
-          <div className="p-4 rounded-md bg-muted/50 text-sm text-muted-foreground mb-4 leading-relaxed">
-            I/We hereby declare that the information provided in this form is true, complete and correct.
-            I/We understand that any false or misleading information may result in the rejection of this
-            application or closure of any account opened based on this application. I/We agree to abide
-            by the terms and conditions governing the operation of the account. I/We authorize the bank
-            to verify any information provided and to make enquiries as it deems necessary.
-          </div>
-          <FormField control={form.control} name="signatureDeclaration" render={({ field }) => (
-            <FormItem className="flex items-start gap-3">
-              <FormControl>
-                <Checkbox
-                  data-testid="checkbox-declaration"
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  className="mt-0.5"
-                />
-              </FormControl>
-              <FormLabel className="text-sm font-normal leading-relaxed cursor-pointer">
-                I confirm that I have read, understood and agree to the above declaration and the bank's terms and conditions. *
-              </FormLabel>
-              <FormMessage />
-            </FormItem>
-          )} />
-        </FormSection>
+        <DeclarationsSection form={form} prefix="declarations" />
 
         <div className="flex justify-end gap-3 pt-2 pb-8">
           <Button
