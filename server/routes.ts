@@ -90,15 +90,17 @@ export async function registerRoutes(
   const sessionTtlMs = 7 * 24 * 60 * 60 * 1000;
   const sessionTtlSec = 7 * 24 * 60 * 60;
   const pgStore = connectPg(session);
-  const sessionPool = new (await import("pg")).default.Pool({
+  const pg = (await import("pg")).default;
+  const sessionPool = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
   });
+  sessionPool.on("error", (err) => console.error("Session pool error:", err.message));
   const sessionStore = new pgStore({
     pool: sessionPool,
     createTableIfMissing: true,
     ttl: sessionTtlSec,
     tableName: "sessions",
+    errorLog: (err: Error) => console.error("Session store error:", err.message),
   });
 
   app.use(
