@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Users, Building2, ArrowRight, CheckCircle2, Shield, Clock, ClipboardList } from "lucide-react";
+import { User, Users, Building2, ArrowRight, CheckCircle2, Shield, Clock } from "lucide-react";
 import { Link } from "wouter";
 import logoImg from "@assets/LOGO3_1770589302028.JPG";
 import IndividualForm from "@/components/individual-form";
@@ -102,11 +102,6 @@ export default function Home() {
                 Change Account Type
               </Button>
             )}
-            <Link href="/applications">
-              <Button variant="outline" size="sm" className="gap-1" data-testid="button-view-applications">
-                <ClipboardList className="w-4 h-4" /> Applications
-              </Button>
-            </Link>
           </div>
         </div>
       </header>
@@ -196,6 +191,11 @@ export default function Home() {
       <footer className="border-t mt-12 py-6">
         <div className="max-w-6xl mx-auto px-4 text-center text-xs text-muted-foreground">
           <p>Alpha10 Group Account Opening Portal. All information provided is kept strictly confidential.</p>
+          <Link href="/applications" className="inline-block mt-3">
+            <span className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer" data-testid="button-view-applications">
+              Admin
+            </span>
+          </Link>
         </div>
       </footer>
     </div>
