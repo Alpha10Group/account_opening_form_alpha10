@@ -7,7 +7,6 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import session from "express-session";
-import connectPg from "connect-pg-simple";
 
 const uploadsDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadsDir)) {
@@ -88,25 +87,10 @@ export async function registerRoutes(
   }
 
   const sessionTtlMs = 7 * 24 * 60 * 60 * 1000;
-  const sessionTtlSec = 7 * 24 * 60 * 60;
-  const pgStore = connectPg(session);
-  const pg = (await import("pg")).default;
-  const sessionPool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
-  sessionPool.on("error", (err) => console.error("Session pool error:", err.message));
-  const sessionStore = new pgStore({
-    pool: sessionPool,
-    createTableIfMissing: true,
-    ttl: sessionTtlSec,
-    tableName: "sessions",
-    errorLog: (err: Error) => console.error("Session store error:", err.message),
-  });
 
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
-      store: sessionStore,
       resave: false,
       saveUninitialized: false,
       proxy: true,
@@ -150,7 +134,8 @@ export async function registerRoutes(
       req.session.isAdmin = true;
       req.session.save((err) => {
         if (err) {
-          return res.status(500).json({ message: "Session error" });
+          console.error("Session save error:", err);
+          return res.status(500).json({ message: "Session error", detail: err.message });
         }
         res.json({ success: true });
       });
