@@ -15,7 +15,7 @@ import { Loader2, Send } from "lucide-react";
 import FormSection from "./form-section";
 import DeclarationsSection from "./declarations-section";
 import FileUpload from "./file-upload";
-import RefereeSection from "./referee-section";
+import ProductsServicesSection from "./products-services-section";
 
 interface IndividualFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -79,23 +79,19 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
       nextOfKinEmail: "",
       nextOfKinDateOfBirth: "",
       nextOfKinGender: undefined,
-      referee1: {
-        fullName: "",
-        address: "",
-        phoneNumber: "",
-        email: "",
-        bankName: "",
-        accountNumber: "",
-        relationship: "",
-      },
-      referee2: {
-        fullName: "",
-        address: "",
-        phoneNumber: "",
-        email: "",
-        bankName: "",
-        accountNumber: "",
-        relationship: "",
+      productsServices: {
+        discretionaryNGN: [],
+        discretionaryForeign: [],
+        shariaCompliant: [],
+        separatelyManaged: [],
+        securitiesTrading: [],
+        nonDiscretionary: [],
+        registrarLiaisonServices: false,
+        othersSelected: false,
+        othersDescription: "",
+        advisoryServices: "",
+        initialInvestmentAmount: "",
+        clientRiskProfile: undefined,
       },
       declarations: {
         declareAtLeast18: false,
@@ -679,8 +675,7 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
           </div>
         </FormSection>
 
-        <RefereeSection form={form} prefix="referee1" refereeNumber={1} />
-        <RefereeSection form={form} prefix="referee2" refereeNumber={2} />
+        <ProductsServicesSection form={form} prefix="productsServices" />
 
         <DeclarationsSection form={form} prefix="declarations" />
 

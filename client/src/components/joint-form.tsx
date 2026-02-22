@@ -15,7 +15,7 @@ import { Loader2, Send } from "lucide-react";
 import FormSection from "./form-section";
 import DeclarationsSection from "./declarations-section";
 import FileUpload from "./file-upload";
-import RefereeSection from "./referee-section";
+import ProductsServicesSection from "./products-services-section";
 
 interface JointFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -361,8 +361,20 @@ export default function JointForm({ onSuccess }: JointFormProps) {
       nextOfKinEmail: "",
       nextOfKinDateOfBirth: "",
       proofOfAddressUrl: "",
-      referee1: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
-      referee2: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
+      productsServices: {
+        discretionaryNGN: [],
+        discretionaryForeign: [],
+        shariaCompliant: [],
+        separatelyManaged: [],
+        securitiesTrading: [],
+        nonDiscretionary: [],
+        registrarLiaisonServices: false,
+        othersSelected: false,
+        othersDescription: "",
+        advisoryServices: "",
+        initialInvestmentAmount: "",
+        clientRiskProfile: undefined,
+      },
       declarations: {
         declareAtLeast18: false,
         declareMinInvestmentPeriod: false,
@@ -553,8 +565,7 @@ export default function JointForm({ onSuccess }: JointFormProps) {
           )} />
         </FormSection>
 
-        <RefereeSection form={form} prefix="referee1" refereeNumber={1} testPrefix="joint" />
-        <RefereeSection form={form} prefix="referee2" refereeNumber={2} testPrefix="joint" />
+        <ProductsServicesSection form={form} prefix="productsServices" />
 
         <DeclarationsSection form={form} prefix="declarations" showSecondSignature />
 

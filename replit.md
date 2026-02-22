@@ -1,7 +1,7 @@
 # Alpha10 Group Account Opening Portal
 
 ## Overview
-A comprehensive account opening form platform for Alpha10 Group (Nigerian financial institution) supporting Individual, Joint, and Corporate account types. Captures all standard KYC/regulatory requirements including personal details, identification, employment, account preferences, referees, document uploads, compliance declarations (PEP, FATCA/CRS), indemnity clauses, and electronic signature capabilities.
+A comprehensive account opening form platform for Alpha10 Group (Nigerian financial institution) supporting Individual, Joint, and Corporate account types. Captures all standard KYC/regulatory requirements including personal details, identification, employment, account preferences, products/services selection, document uploads, compliance declarations (PEP, FATCA/CRS), indemnity clauses, and electronic signature capabilities.
 
 ## Branding
 - **Company**: Alpha10 Group
@@ -23,7 +23,7 @@ A comprehensive account opening form platform for Alpha10 Group (Nigerian financ
 - Passport photograph uploads for all account types
 - Document uploads (ID documents, proof of address, corporate documents) supporting images and PDFs
 - Electronic signature capture via file upload
-- Referee sections (2 referees with bank details) for all account types
+- Products/Services Required section (Asset Management, Securities Trading, Advisory Services, Risk Profile)
 - FATCA/CRS Self-Certification with conditional foreign tax residency fields
 - PEP (Politically Exposed Person) declaration
 - Terms & Conditions acceptance
@@ -38,7 +38,7 @@ A comprehensive account opening form platform for Alpha10 Group (Nigerian financ
 - `client/src/components/corporate-form.tsx` - Corporate account form (directors + signatories)
 - `client/src/components/declarations-section.tsx` - Shared declarations, FATCA/CRS, PEP, terms & conditions
 - `client/src/components/file-upload.tsx` - Reusable file upload component (signature/photo/document variants)
-- `client/src/components/referee-section.tsx` - Reusable referee section component
+- `client/src/components/products-services-section.tsx` - Products/Services Required section (Asset Management, Securities Trading, etc.)
 - `client/src/components/success-screen.tsx` - Post-submission confirmation
 - `client/src/components/form-section.tsx` - Reusable form section card
 - `client/src/pages/applications.tsx` - Applications dashboard (view/search submitted applications)
@@ -51,7 +51,7 @@ A comprehensive account opening form platform for Alpha10 Group (Nigerian financ
 - ADMIN_PASSWORD stored as environment secret
 - SESSION_SECRET required for session management
 - Rate limiting: 5 attempts per IP, 15-minute lockout
-- Sessions stored in PostgreSQL via connect-pg-simple
+- In-memory session store (resets on server restart, acceptable for single admin)
 - Works on any hosting platform (Replit, Railway, etc.)
 
 ## API Endpoints
@@ -87,6 +87,6 @@ A comprehensive account opening form platform for Alpha10 Group (Nigerian financ
 6. Account Details (with initial deposit amount, communication preferences)
 7. Passport Photograph Upload
 8. Document Uploads (ID document, proof of address)
-9. Referees (2 referees with bank details)
+9. Products/Services Required (Asset Management, Securities Trading, Advisory Services, Risk Profile)
 10. Declarations (PEP, FATCA/CRS, Terms & Conditions)
 11. Signature Upload

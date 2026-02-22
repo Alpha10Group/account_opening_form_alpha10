@@ -15,7 +15,7 @@ import { Loader2, Send, Plus, Trash2 } from "lucide-react";
 import FormSection from "./form-section";
 import DeclarationsSection from "./declarations-section";
 import FileUpload from "./file-upload";
-import RefereeSection from "./referee-section";
+import ProductsServicesSection from "./products-services-section";
 
 interface CorporateFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -62,8 +62,20 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
       memorandumUrl: "",
       boardResolutionUrl: "",
       proofOfAddressUrl: "",
-      referee1: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
-      referee2: { fullName: "", address: "", phoneNumber: "", email: "", bankName: "", accountNumber: "", relationship: "" },
+      productsServices: {
+        discretionaryNGN: [],
+        discretionaryForeign: [],
+        shariaCompliant: [],
+        separatelyManaged: [],
+        securitiesTrading: [],
+        nonDiscretionary: [],
+        registrarLiaisonServices: false,
+        othersSelected: false,
+        othersDescription: "",
+        advisoryServices: "",
+        initialInvestmentAmount: "",
+        clientRiskProfile: undefined,
+      },
       declarations: {
         declareAtLeast18: false,
         declareMinInvestmentPeriod: false,
@@ -598,8 +610,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
           )} />
         </FormSection>
 
-        <RefereeSection form={form} prefix="referee1" refereeNumber={1} testPrefix="corp" />
-        <RefereeSection form={form} prefix="referee2" refereeNumber={2} testPrefix="corp" />
+        <ProductsServicesSection form={form} prefix="productsServices" />
 
         <DeclarationsSection form={form} prefix="declarations" />
 

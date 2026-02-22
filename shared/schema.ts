@@ -15,14 +15,19 @@ export const applications = pgTable("applications", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const refereeSchema = z.object({
-  fullName: z.string().min(1, "Referee name is required"),
-  address: z.string().min(1, "Referee address is required"),
-  phoneNumber: z.string().min(1, "Referee phone is required"),
-  email: z.string().optional(),
-  bankName: z.string().min(1, "Bank name is required"),
-  accountNumber: z.string().min(1, "Account number is required"),
-  relationship: z.string().min(1, "Relationship is required"),
+export const productsServicesSchema = z.object({
+  discretionaryNGN: z.array(z.string()).optional(),
+  discretionaryForeign: z.array(z.string()).optional(),
+  shariaCompliant: z.array(z.string()).optional(),
+  separatelyManaged: z.array(z.string()).optional(),
+  securitiesTrading: z.array(z.string()).optional(),
+  nonDiscretionary: z.array(z.string()).optional(),
+  registrarLiaisonServices: z.boolean().optional(),
+  othersSelected: z.boolean().optional(),
+  othersDescription: z.string().optional(),
+  advisoryServices: z.string().optional(),
+  initialInvestmentAmount: z.string().optional(),
+  clientRiskProfile: z.enum(["low", "medium", "high"]).optional(),
 });
 
 export const declarationsSchema = z.object({
@@ -110,8 +115,7 @@ export const individualFormSchema = z.object({
   nextOfKinDateOfBirth: z.string().optional(),
   nextOfKinGender: z.enum(["male", "female"]).optional(),
 
-  referee1: refereeSchema,
-  referee2: refereeSchema,
+  productsServices: productsServicesSchema.optional(),
 
   declarations: declarationsSchema,
 });
@@ -164,8 +168,7 @@ export const jointFormSchema = z.object({
   nextOfKinEmail: z.string().optional(),
   nextOfKinDateOfBirth: z.string().optional(),
   proofOfAddressUrl: z.string().optional(),
-  referee1: refereeSchema,
-  referee2: refereeSchema,
+  productsServices: productsServicesSchema.optional(),
   declarations: declarationsSchema,
 });
 
@@ -228,8 +231,7 @@ export const corporateFormSchema = z.object({
   boardResolutionUrl: z.string().optional(),
   proofOfAddressUrl: z.string().optional(),
 
-  referee1: refereeSchema,
-  referee2: refereeSchema,
+  productsServices: productsServicesSchema.optional(),
 
   declarations: declarationsSchema,
 });
