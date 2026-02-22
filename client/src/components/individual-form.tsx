@@ -16,6 +16,7 @@ import FormSection from "./form-section";
 import DeclarationsSection from "./declarations-section";
 import FileUpload from "./file-upload";
 import ProductsServicesSection from "./products-services-section";
+import BankDetailsSection from "./bank-details-section";
 
 interface IndividualFormProps {
   onSuccess: (referenceNumber: string) => void;
@@ -676,6 +677,8 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
         </FormSection>
 
         <ProductsServicesSection form={form} prefix="productsServices" />
+
+        <BankDetailsSection />
 
         <DeclarationsSection form={form} prefix="declarations" />
 
