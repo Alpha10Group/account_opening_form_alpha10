@@ -163,7 +163,7 @@ export default function Home() {
             })}
             <Card
               className="overflow-visible hover-elevate active-elevate-2 cursor-pointer transition-all duration-200 flex flex-col"
-              onClick={() => window.open("https://dollar-fund-registration.vercel.app/", "_blank")}
+              onClick={() => window.location.href = "https://dollar-fund-registration.vercel.app/"}
               data-testid="card-account-mutual-fund"
             >
               <div className="p-6 flex flex-col flex-1">
