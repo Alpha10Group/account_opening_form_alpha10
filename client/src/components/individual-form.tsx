@@ -73,6 +73,14 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
       accountCurrency: undefined,
       accountPurpose: "",
       initialDepositAmount: "",
+      primaryBankName: "",
+      primaryAccountNumber: "",
+      primaryAccountName: "",
+      primarySortCode: "",
+      secondaryBankName: "",
+      secondaryAccountNumber: "",
+      secondaryAccountName: "",
+      secondarySortCode: "",
       nextOfKinFullName: "",
       nextOfKinRelationship: "",
       nextOfKinPhone: "",
@@ -599,6 +607,74 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <FormMessage />
               </FormItem>
             )} />
+          </div>
+
+          <div className="mt-6 pt-4 border-t">
+            <p className="text-sm font-semibold text-foreground mb-3">Primary Account Details</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField control={form.control} name="primaryBankName" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bank Name *</FormLabel>
+                  <FormControl><Input data-testid="input-primaryBankName" placeholder="Enter bank name" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="primaryAccountNumber" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Number *</FormLabel>
+                  <FormControl><Input data-testid="input-primaryAccountNumber" placeholder="Enter account number" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="primaryAccountName" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Name *</FormLabel>
+                  <FormControl><Input data-testid="input-primaryAccountName" placeholder="Enter account name" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="primarySortCode" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sort Code</FormLabel>
+                  <FormControl><Input data-testid="input-primarySortCode" placeholder="Enter sort code" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
+          </div>
+
+          <div className="mt-6 pt-4 border-t">
+            <p className="text-sm font-semibold text-foreground mb-3">Secondary Account Details</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField control={form.control} name="secondaryBankName" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bank Name</FormLabel>
+                  <FormControl><Input data-testid="input-secondaryBankName" placeholder="Enter bank name" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="secondaryAccountNumber" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Number</FormLabel>
+                  <FormControl><Input data-testid="input-secondaryAccountNumber" placeholder="Enter account number" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="secondaryAccountName" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account Name</FormLabel>
+                  <FormControl><Input data-testid="input-secondaryAccountName" placeholder="Enter account name" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="secondarySortCode" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sort Code</FormLabel>
+                  <FormControl><Input data-testid="input-secondarySortCode" placeholder="Enter sort code" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+            </div>
           </div>
         </FormSection>
 
