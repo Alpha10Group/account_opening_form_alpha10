@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,29 +45,42 @@ export default function Home() {
   const [viewState, setViewState] = useState<ViewState>("selection");
   const [referenceNumber, setReferenceNumber] = useState("");
 
+  const goToSelection = useCallback(() => {
+    setSelectedType(null);
+    setViewState("selection");
+    setReferenceNumber("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    const onPopState = () => {
+      goToSelection();
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [goToSelection]);
+
   const handleSelectAccount = (type: AccountType) => {
+    window.history.pushState({ view: "form", type }, "", `/?type=${type}`);
     setSelectedType(type);
     setViewState("form");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSuccess = (ref: string) => {
+    window.history.pushState({ view: "success" }, "", "/?submitted=true");
     setReferenceNumber(ref);
     setViewState("success");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleBackToSelection = () => {
-    setSelectedType(null);
-    setViewState("selection");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.back();
   };
 
   const handleNewApplication = () => {
-    setSelectedType(null);
-    setViewState("selection");
-    setReferenceNumber("");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.pushState(null, "", "/");
+    goToSelection();
   };
 
   if (viewState === "success") {
