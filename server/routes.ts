@@ -7,6 +7,8 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
+import pg from "pg";
 
 const uploadsDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadsDir)) {
@@ -88,8 +90,18 @@ export async function registerRoutes(
 
   const sessionTtlMs = 7 * 24 * 60 * 60 * 1000;
 
+  const PgStore = connectPgSimple(session);
+  const pgPool = new pg.Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+
   app.use(
     session({
+      store: new PgStore({
+        pool: pgPool,
+        tableName: "user_sessions",
+        createTableIfMissing: true,
+      }),
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,

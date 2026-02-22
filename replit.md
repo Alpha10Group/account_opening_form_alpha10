@@ -51,7 +51,8 @@ A comprehensive account opening form platform for Alpha10 Group (Nigerian financ
 - ADMIN_PASSWORD stored as environment secret
 - SESSION_SECRET required for session management
 - Rate limiting: 5 attempts per IP, 15-minute lockout
-- In-memory session store (resets on server restart, acceptable for single admin)
+- PostgreSQL-backed session store (connect-pg-simple, `user_sessions` table, auto-created)
+- Sessions persist across server restarts
 - Works on any hosting platform (Replit, Railway, etc.)
 
 ## API Endpoints
