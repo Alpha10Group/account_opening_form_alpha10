@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Users, Building2, ArrowRight, CheckCircle2, Shield, Clock, TrendingUp } from "lucide-react";
+import { User, Users, Building2, ArrowRight, CheckCircle2, Shield, Clock } from "lucide-react";
 import { Link } from "wouter";
 import logoImg from "@assets/LOGO3_1770589302028.JPG";
 import IndividualForm from "@/components/individual-form";
@@ -130,7 +130,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
             {accountOptions.map((option) => {
               const Icon = option.icon;
               return (
@@ -161,30 +161,6 @@ export default function Home() {
                 </Card>
               );
             })}
-            <Card
-              className="overflow-visible hover-elevate active-elevate-2 cursor-pointer transition-all duration-200 flex flex-col"
-              onClick={() => window.location.href = "https://dollar-fund-registration.vercel.app/"}
-              data-testid="card-account-mutual-fund"
-            >
-              <div className="p-6 flex flex-col flex-1">
-                <div className="w-12 h-12 rounded-md bg-gradient-to-br from-[#961A1C] to-[#4a0d0e] dark:from-[#b02022] dark:to-[#6b1315] flex items-center justify-center mb-4">
-                  <TrendingUp className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">Mutual Fund Subscription</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex-1">Subscribe to Alpha10 mutual fund products including dollar fund and money market investments.</p>
-                <ul className="space-y-2 mb-5">
-                  {["Dollar fund investment", "Money market fund", "Professional management", "Competitive returns"].map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-[#961A1C] flex-shrink-0" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button className="w-full gap-2" data-testid="button-open-mutual-fund">
-                  Subscribe Now <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            </Card>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">

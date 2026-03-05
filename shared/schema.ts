@@ -22,6 +22,8 @@ export const productsServicesSchema = z.object({
   separatelyManaged: z.array(z.string()).optional(),
   securitiesTrading: z.array(z.string()).optional(),
   nonDiscretionary: z.array(z.string()).optional(),
+  mutualFunds: z.array(z.string()).optional(),
+  incomeDistribution: z.string().optional(),
   registrarLiaisonServices: z.boolean().optional(),
   othersSelected: z.boolean().optional(),
   othersDescription: z.string().optional(),
