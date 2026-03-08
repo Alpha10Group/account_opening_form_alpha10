@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Users, Building2, ArrowRight, CheckCircle2, Shield, Clock } from "lucide-react";
+import { User, Users, Building2, ArrowRight, Shield, Clock, CheckCircle2 } from "lucide-react";
 import { Link } from "wouter";
 import logoImg from "@assets/LOGO3_1770589302028.JPG";
 import IndividualForm from "@/components/individual-form";
@@ -17,25 +17,22 @@ const accountOptions = [
   {
     type: "individual" as const,
     title: "Individual Account",
-    description: "Personal banking account for a single account holder with full access to banking services.",
+    description: "Personal investment account for a single account holder with full access to investment services.",
     icon: User,
-    features: ["Personal savings & current", "Debit card access", "Online & mobile banking", "Single signatory"],
     color: "from-[#961A1C] to-[#7a1517] dark:from-[#b02022] dark:to-[#961A1C]",
   },
   {
     type: "joint" as const,
     title: "Joint Account",
-    description: "Shared account for two or more individuals with flexible operating mandates.",
+    description: "Shared investment account for two or more individuals with flexible operating mandates.",
     icon: Users,
-    features: ["Shared account access", "Flexible mandates", "Multiple signatories", "Joint liability"],
     color: "from-gray-700 to-gray-800 dark:from-gray-500 dark:to-gray-600",
   },
   {
     type: "corporate" as const,
     title: "Corporate Account",
-    description: "Business account for registered companies with advanced corporate banking features.",
+    description: "Business investment account for registered companies with advanced corporate investment features.",
     icon: Building2,
-    features: ["Business transactions", "Multiple signatories", "Corporate lending", "Trade services"],
     color: "from-gray-900 to-black dark:from-gray-400 dark:to-gray-500",
   },
 ];
@@ -145,15 +142,7 @@ export default function Home() {
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{option.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 flex-1">{option.description}</p>
-                    <ul className="space-y-2 mb-5">
-                      {option.features.map((f) => (
-                        <li key={f} className="flex items-center gap-2 text-sm">
-                          <CheckCircle2 className="w-4 h-4 text-[#961A1C] flex-shrink-0" />
-                          <span>{f}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <p className="text-sm text-muted-foreground mb-5 flex-1">{option.description}</p>
                     <Button className="w-full gap-2" data-testid={`button-open-${option.type}`}>
                       Open Account <ArrowRight className="w-4 h-4" />
                     </Button>
