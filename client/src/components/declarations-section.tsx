@@ -456,7 +456,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
           </p>
 
           <h5 className="font-bold text-foreground mt-4 mb-2">Other Terms and Conditions</h5>
-          <p className="mb-2"><strong>Services:</strong> Alpha10 provides various financial services including, without limitation, trading and dealing in all kinds of financial products, investment advisory and investment banking services and the arrangement of deals in relation to all kinds of financial products. We can also provide other services if so agreed between both parties. Unless we agree otherwise with you, we shall not be responsible for managing or supervising the management of any of your financial products.</p>
+          <p className="mb-2"><strong>Services:</strong> Alpha10 provides various financial services including, without limitation, trading and dealing in all kinds of financial products, investment advisory and investment services and the arrangement of deals in relation to all kinds of financial products. We can also provide other services if so agreed between both parties. Unless we agree otherwise with you, we shall not be responsible for managing or supervising the management of any of your financial products.</p>
           <p className="mb-3"><strong>Set-Off:</strong> To the extent permissible in law, Alpha10 shall be entitled to set off any amount which you owe to Alpha10 from whatsoever cause, against any funds standing to the credit of any of your accounts with Alpha10. Alpha10 will inform you promptly after Alpha10 has effected set-off in respect of any of your accounts.</p>
         </div>
         <FormField

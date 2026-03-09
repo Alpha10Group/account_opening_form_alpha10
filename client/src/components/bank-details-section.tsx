@@ -11,7 +11,7 @@ const productAccounts = [
 
 export default function BankDetailsSection() {
   return (
-    <FormSection title="Bank Details" description="Alpha10 Group bank account details for deposits and transfers">
+    <FormSection title="Bank Details" description="Alpha10 bank account details for deposits and transfers">
       <div className="overflow-x-auto">
         <table className="w-full text-sm border" data-testid="table-product-accounts">
           <thead>

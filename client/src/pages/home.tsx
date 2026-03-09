@@ -95,9 +95,9 @@ export default function Home() {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
-            <img src={logoImg} alt="Alpha10 Group" className="w-10 h-10 rounded-md object-contain" data-testid="img-logo" />
+            <img src={logoImg} alt="Alpha10" className="w-10 h-10 rounded-md object-contain" data-testid="img-logo" />
             <div>
-              <h1 className="text-lg font-semibold leading-tight" data-testid="text-app-title">Alpha10 Group</h1>
+              <h1 className="text-lg font-semibold leading-tight" data-testid="text-app-title">Alpha10</h1>
               <p className="text-xs text-muted-foreground">Account Opening Portal</p>
             </div>
           </div>
@@ -192,7 +192,7 @@ export default function Home() {
 
       <footer className="border-t mt-12 py-6">
         <div className="max-w-6xl mx-auto px-4 text-center text-xs text-muted-foreground">
-          <p>Alpha10 Group Account Opening Portal. All information provided is kept strictly confidential.</p>
+          <p>Alpha10 Account Opening Portal. All information provided is kept strictly confidential.</p>
           <Link href="/applications" className="inline-block mt-3">
             <span className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer" data-testid="button-view-applications">
               Admin

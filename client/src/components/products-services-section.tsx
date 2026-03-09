@@ -9,22 +9,15 @@ interface ProductsServicesSectionProps {
   prefix: string;
 }
 
-const DISCRETIONARY_NGN = [
-  "Treasury Backed Investment",
-  "Liquidity Management Investment",
-  "Liquidity Management Flex",
-  "Kiddies Investment Account",
+const MUTUAL_FUNDS = [
+  "Alpha10 Dollar Fund",
+  "Alpha10 Money Market Fund",
+  "Alpha10 Halal Fund",
 ];
 
 const DISCRETIONARY_FOREIGN = [
   "FX Liquidity Management Investment",
   "FX Liquidity Management Flex",
-  "Eurobond Investment Note",
-];
-
-const SEPARATELY_MANAGED = [
-  "Discretionary Portfolio Management",
-  "Non-Discretionary Portfolio Management",
 ];
 
 const SHARIA_COMPLIANT = [
@@ -32,10 +25,9 @@ const SHARIA_COMPLIANT = [
   "Kiddies Halal Investment Account",
 ];
 
-const MUTUAL_FUNDS = [
-  "Alpha10 Dollar Fund",
-  "Alpha10 Money Market Fund",
-  "Alpha10 Halal Fund",
+const SEPARATELY_MANAGED = [
+  "Discretionary Portfolio Management",
+  "Non-Discretionary Portfolio Management",
 ];
 
 const NON_DISCRETIONARY = [
@@ -45,6 +37,13 @@ const NON_DISCRETIONARY = [
   "FGN Bond",
   "Eurobonds",
   "Sukuk",
+];
+
+const DISCRETIONARY_NGN = [
+  "Treasury Backed Investment",
+  "Liquidity Management Investment",
+  "Liquidity Management Flex",
+  "Kiddies Investment Account",
 ];
 
 const SECURITIES_TRADING = [
@@ -100,22 +99,65 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
 
         <div>
           <h4 className="text-sm font-semibold text-primary mb-3">ASSET MANAGEMENT</h4>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <div>
-              <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Discretionary Options (NGN)</p>
-              <CheckboxGroup form={form} fieldName={`${prefix}.discretionaryNGN`} options={DISCRETIONARY_NGN} testPrefix="disc-ngn" />
+              <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Mutual Funds</p>
+              <CheckboxGroup form={form} fieldName={`${prefix}.mutualFunds`} options={MUTUAL_FUNDS} testPrefix="mutual-funds" />
+              <div className="mt-3">
+                <p className="text-xs font-medium mb-2">Income Distribution</p>
+                <FormField
+                  control={form.control}
+                  name={`${prefix}.incomeDistribution`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          <Checkbox
+                            id={`${prefix}-income-payment`}
+                            data-testid="checkbox-income-payment"
+                            checked={field.value === "Payment"}
+                            onCheckedChange={(checked) => field.onChange(checked ? "Payment" : undefined)}
+                          />
+                          <label htmlFor={`${prefix}-income-payment`} className="text-sm cursor-pointer">Payment</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Checkbox
+                            id={`${prefix}-income-reinvestment`}
+                            data-testid="checkbox-income-reinvestment"
+                            checked={field.value === "Reinvestment"}
+                            onCheckedChange={(checked) => field.onChange(checked ? "Reinvestment" : undefined)}
+                          />
+                          <label htmlFor={`${prefix}-income-reinvestment`} className="text-sm cursor-pointer">Reinvestment</label>
+                        </div>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <div>
               <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Discretionary Options (Foreign Currency)</p>
               <CheckboxGroup form={form} fieldName={`${prefix}.discretionaryForeign`} options={DISCRETIONARY_FOREIGN} testPrefix="disc-foreign" />
+            </div>
 
-              <p className="text-xs font-semibold text-muted-foreground mb-2 mt-4 uppercase">Separately Managed Account</p>
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Sharia Complaint Options (Discretionary)</p>
+              <CheckboxGroup form={form} fieldName={`${prefix}.shariaCompliant`} options={SHARIA_COMPLIANT} testPrefix="sharia" />
+            </div>
+
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 pt-4 border-t">
+
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Separately Managed Account</p>
               <CheckboxGroup form={form} fieldName={`${prefix}.separatelyManaged`} options={SEPARATELY_MANAGED} testPrefix="sep-managed" />
               <p className="text-[10px] text-muted-foreground italic mt-1">Investment Policy Statement (IPS) to be executed by client after on-boarding.</p>
-
-              <div className="space-y-2 mt-4">
+              <div className="space-y-2 mt-3">
                 <FormField
                   control={form.control}
                   name={`${prefix}.registrarLiaisonServices`}
@@ -165,47 +207,13 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
             </div>
 
             <div>
-              <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Sharia Complaint Options (Discretionary)</p>
-              <CheckboxGroup form={form} fieldName={`${prefix}.shariaCompliant`} options={SHARIA_COMPLIANT} testPrefix="sharia" />
-
-              <p className="text-xs font-semibold text-muted-foreground mb-2 mt-4 uppercase">Mutual Funds</p>
-              <CheckboxGroup form={form} fieldName={`${prefix}.mutualFunds`} options={MUTUAL_FUNDS} testPrefix="mutual-funds" />
-
-              <div className="mt-3">
-                <p className="text-xs font-medium mb-2">Income Distribution</p>
-                <FormField
-                  control={form.control}
-                  name={`${prefix}.incomeDistribution`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <Checkbox
-                            id={`${prefix}-income-payment`}
-                            data-testid="checkbox-income-payment"
-                            checked={field.value === "Payment"}
-                            onCheckedChange={(checked) => field.onChange(checked ? "Payment" : undefined)}
-                          />
-                          <label htmlFor={`${prefix}-income-payment`} className="text-sm cursor-pointer">Payment</label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Checkbox
-                            id={`${prefix}-income-reinvestment`}
-                            data-testid="checkbox-income-reinvestment"
-                            checked={field.value === "Reinvestment"}
-                            onCheckedChange={(checked) => field.onChange(checked ? "Reinvestment" : undefined)}
-                          />
-                          <label htmlFor={`${prefix}-income-reinvestment`} className="text-sm cursor-pointer">Reinvestment</label>
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <p className="text-xs font-semibold text-muted-foreground mb-2 mt-4 uppercase">Non-Discretionary Options</p>
+              <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Non-Discretionary Options</p>
               <CheckboxGroup form={form} fieldName={`${prefix}.nonDiscretionary`} options={NON_DISCRETIONARY} testPrefix="non-disc" />
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase">Discretionary Options (NGN)</p>
+              <CheckboxGroup form={form} fieldName={`${prefix}.discretionaryNGN`} options={DISCRETIONARY_NGN} testPrefix="disc-ngn" />
             </div>
 
           </div>

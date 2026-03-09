@@ -116,7 +116,7 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="p-8 w-full max-w-sm">
         <div className="flex flex-col items-center mb-6">
-          <img src={logoImg} alt="Alpha10 Group" className="w-14 h-14 rounded-md object-contain mb-3" />
+          <img src={logoImg} alt="Alpha10" className="w-14 h-14 rounded-md object-contain mb-3" />
           <h2 className="text-lg font-semibold">Admin Access</h2>
           <p className="text-sm text-muted-foreground text-center mt-1">Enter the admin password to view submitted applications.</p>
         </div>
@@ -233,9 +233,9 @@ export default function Applications() {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
-            <img src={logoImg} alt="Alpha10 Group" className="w-10 h-10 rounded-md object-contain" />
+            <img src={logoImg} alt="Alpha10" className="w-10 h-10 rounded-md object-contain" />
             <div>
-              <h1 className="text-lg font-semibold leading-tight">Alpha10 Group</h1>
+              <h1 className="text-lg font-semibold leading-tight">Alpha10</h1>
               <p className="text-xs text-muted-foreground">Applications Dashboard</p>
             </div>
           </div>
