@@ -756,7 +756,7 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
 
         <BankDetailsSection />
 
-        <DeclarationsSection form={form} prefix="declarations" />
+        <DeclarationsSection form={form} prefix="declarations" accountType="individual" />
 
         <div className="flex justify-end gap-4 pt-6 pb-8">
           <Button type="submit" disabled={submitMutation.isPending} data-testid="button-submit">

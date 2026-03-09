@@ -691,7 +691,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
 
         <BankDetailsSection />
 
-        <DeclarationsSection form={form} prefix="declarations" />
+        <DeclarationsSection form={form} prefix="declarations" accountType="corporate" />
 
         <div className="flex justify-end gap-3 pt-2 pb-8">
           <Button

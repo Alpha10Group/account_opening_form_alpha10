@@ -646,7 +646,7 @@ export default function JointForm({ onSuccess }: JointFormProps) {
 
         <BankDetailsSection />
 
-        <DeclarationsSection form={form} prefix="declarations" showSecondSignature />
+        <DeclarationsSection form={form} prefix="declarations" showSecondSignature accountType="joint" />
 
         <div className="flex justify-end gap-3 pt-2 pb-8">
           <Button
