@@ -454,37 +454,120 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
           ) : (
             <>
               <h4 className="font-bold text-foreground mb-3 text-base">TERMS AND CONDITIONS</h4>
-              <p className="mb-3">
-                This AGREEMENT is made between the Client (hereinafter referred to as the "Client" or "You") of the first part,
-                and <strong>Alpha10 Fund Management Limited</strong>, a company duly incorporated under the Companies and Allied Matters Act
-                1990 and having its registered office at 13 Mambolo Street, Zone 2, Wuse, Abuja (hereinafter referred to as the
-                "Fund/Portfolio Manager" or "Alpha10" or "Firm") of the second part.
+              <p className="mb-3">This AGREEMENT is made this ____ day of __________</p>
+              <p className="mb-1"><strong>Between</strong></p>
+              <p className="mb-3 italic">
+                ________________________________________ (Name of Client)<br />
+                of ______________________________________<br />
+                (Address of Client)<br />
+                (hereinafter referred to as the "Client" or "You" which expression shall wherever the context admits include its
+                legal representatives/successors-in-title and permitted assigns) of the first part.
               </p>
+              <p className="mb-1"><strong>And</strong></p>
+              <p className="mb-3">
+                Alpha10 Fund Management Limited, a company duly incorporated under the Companies and Allied Matters Act, 1990
+                and having its registered office at 13 Mambolo Street, Zone 2, Wuse, Abuja (hereinafter referred to as the
+                "Fund/Portfolio Manager" or "Alpha10" or "Firm" which expression shall wherever the context so admits include
+                its successors-in-title and permitted assigns) of the second part.
+              </p>
+
               <p className="mb-2"><strong>WHEREAS:</strong></p>
-              <ol className="list-decimal pl-5 mb-3 space-y-1">
-                <li>Alpha10 is a registered Fund/Portfolio Manager duly licensed by the Securities and Exchange Commission (SEC).</li>
-                <li>The Client hereby appoints the Fund/Portfolio Manager to provide fund management services, and the Fund/Portfolio Manager has agreed to render the services and manage the Client's investments in accordance with the Securities and Exchange Commission (SEC) rules.</li>
-                <li>The Parties have decided to enter into this Agreement for the purpose of setting out the terms and conditions which will govern the relationship.</li>
-              </ol>
-              <p className="mb-3 italic text-xs">
-                Please review this Client Services Agreement carefully as it sets forth the understanding between you and Alpha10
-                regarding the services the Firm will provide you. These Terms are legally binding and will apply on the basis of
-                our relationship with you.
-              </p>
+              <p className="mb-2">Alpha10 is a registered Fund/Portfolio Manager duly licensed by the Securities and Exchange Commission (SEC).</p>
+              <p className="mb-2">The Client hereby appoints the Fund/Portfolio Manager to provide fund management services, and the Fund/Portfolio Manager has agreed to render the services and manage the Client's investments in accordance with the Securities and Exchange Commission (SEC) rules.</p>
+              <p className="mb-3">The Parties have decided to enter into this Agreement for the purpose of setting out the terms and conditions which will govern the relationship.</p>
+
+              <p className="mb-2 italic text-xs">Please review this Client Services Agreement ("Agreement") carefully as it sets forth the understanding between you and Alpha10 regarding the services the Firm will provide you.</p>
+              <p className="mb-2 italic text-xs">These terms and conditions ("Terms") shall be effective from the date that you accept these terms or the date we commence business with you, whichever is earlier. Terms are legally binding and (subject to amendments, clients will be notified of such changes) will apply on the basis of our relationship with you.</p>
+              <p className="mb-2 italic text-xs">We may provide certain services to you or receive instructions from you by means of electronic links or systems and where this is the case, the provision of such services will be subject to the terms of any agreement(s) and disclaimer(s) set out on such electronic links or systems or otherwise notified to you.</p>
+              <p className="mb-2 italic text-xs">Without limiting the circumstances in which such agreement(s) and disclaimer(s) are binding on you, they are made binding on you by these Terms. These Terms will also supplement such agreement(s) and disclosure(s) to the extent that they do not conflict with such agreement(s) or disclaimer(s).</p>
+              <p className="mb-3 italic text-xs">These Terms together with any other agreement, notice, disclaimers, disclosure or other special terms and conditions shall together constitute the terms of business which shall govern the provision by us to you of any regulated or ancillary activity.</p>
+
               <h5 className="font-bold text-foreground mt-4 mb-2">1. Authority</h5>
-              <p className="mb-3">
-                The Client hereby appoints Alpha10 to be the Client's Fund/Portfolio Manager and provide Discretionary Fund Management Services
-                or Non-discretionary Fund Management Services as to the investment account(s) established by Client and managed by Alpha10.
-              </p>
+              <p className="mb-2">The Client hereby appoints Alpha10 to be the Client's Fund/Portfolio Manager and provide:</p>
+              <div className="mb-1 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Discretionary Fund Management Services</span></div>
+              <p className="mb-1 pl-5 text-xs">or</p>
+              <div className="mb-3 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Non-discretionary Fund Management Services (Tick Box)</span></div>
+              <p className="mb-3">as to the investment account(s) established by Client and managed by Alpha10.</p>
+
               <h5 className="font-bold text-foreground mt-4 mb-2">2. Investment Services</h5>
-              <p className="mb-3">Alpha10 provides investment services targeted at Qualified Institutional Investors, High-Net-Worth Individuals, and Retail Investors, including the management and execution of strategies within Alpha10's product offerings.</p>
+              <p className="mb-2"><strong>2.1 Discretionary Investment Services</strong></p>
+              <p className="mb-2">Alpha10 provides investment services targeted at Qualified Institutional Investors, High-Net-Worth Individuals, and Retail Investors. These services include, without limitation, the management and execution of strategies within Alpha10's product offerings.</p>
+              <p className="mb-2">Alpha10 agrees to work with Client or its designated representative to develop appropriate goals, objectives, risk tolerance, and standards for its Products/Services.</p>
+              <p className="mb-2">The Client acknowledges and agrees to take responsibility for ensuring that the investment objectives and directives given to Alpha10 are in accordance with applicable law.</p>
+              <p className="mb-2">The Client represents that all information given to Alpha10 are accurate and complete, and agrees that Alpha10 may rely on such information in performing its fund management duties hereunder.</p>
+              <p className="mb-3">Client acknowledges and agrees to promptly advise Alpha10 of any changes to Client's investment goals or objectives.</p>
+
+              <p className="mb-2"><strong>2.2 Duties of the Fund / Portfolio Manager</strong></p>
+              <p className="mb-1">Alpha10 shall have full discretionary authority (except for Non-discretionary services) over the assets under management. The Fund/Portfolio Manager's duties shall include:</p>
+              <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
+                <li>Select, acquire, hold, and dispose of investments in accordance with the agreed investment strategy.</li>
+                <li>Act in good faith and in the best interests of the Client, exercising care, diligence, and skill.</li>
+                <li>Continuously monitor the product performance and make adjustments as necessary to reflect changing market conditions or economic developments.</li>
+                <li>Provide periodic performance reports to regulatory authorities and the Client.</li>
+                <li>Ensure that all investment activity complies with applicable laws, regulations, and internal risk management policies.</li>
+              </ol>
+
+              <p className="mb-2"><strong>2.3 Duties of the Client</strong></p>
+              <p className="mb-1">The Client agrees to fulfill the following responsibilities to enable Alpha10 effectively carry out its mandate:</p>
+              <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
+                <li>Provide timely, complete, and accurate information concerning the Client's financial situation, investment objectives, risk tolerance, liquidity needs, and any material changes thereto.</li>
+                <li>Inform the Fund/Portfolio Manager in writing of any investment restrictions, prohibited securities or sectors, tax considerations, or other constraints.</li>
+                <li>Pay fees and any related expenses in accordance with the terms outlined in the agreement.</li>
+                <li>The Client remains solely responsible for all tax obligations arising from investments made on their behalf.</li>
+              </ol>
+
               <h5 className="font-bold text-foreground mt-4 mb-2">3. Operation of the Investment Account</h5>
-              <p className="mb-3">You warrant that you have the necessary authority to open and operate the investment account. Instructions must be received before 1pm on any business day. Transaction processing may take up to 72 working hours.</p>
-              <h5 className="font-bold text-foreground mt-4 mb-2">4–16. Additional Terms</h5>
-              <p className="mb-3">Third Party Indemnity, Statements, Personal Information, Interest/Profit Payment, Liquidation Notice, Charges Payable, Rollover Instruction, Withholding Tax, Dealing & Advice, Liability, Email Indemnity, Force Majeure, and Governing Law provisions apply as per the full Client Services Agreement issued by Alpha10.</p>
-              <h5 className="font-bold text-foreground mt-4 mb-2">Other Terms and Conditions</h5>
-              <p className="mb-2"><strong>Services:</strong> Alpha10 provides various financial services including, without limitation, trading and dealing in all kinds of financial products, investment advisory and investment services and the arrangement of deals in relation to all kinds of financial products.</p>
-              <p className="mb-3"><strong>Set-Off:</strong> To the extent permissible in law, Alpha10 shall be entitled to set off any amount which you owe to Alpha10 from whatsoever cause, against any funds standing to the credit of any of your accounts with Alpha10.</p>
+              <p className="mb-2"><strong>3.1 Authority to Operate</strong></p>
+              <p className="mb-2">You warrant that you have the necessary authority to open and operate the investment account.</p>
+              <p className="mb-2">Alpha10 shall be entitled to rely on, and act in accordance with, instructions received from any person authorized to access or use the investment account by virtue of any authority, resolution, mandate or power of attorney ("authority") provided by you or your nominee to Alpha10.</p>
+              <p className="mb-3">You can however cancel such authority in writing, but Alpha10 must have acknowledged such cancellation before it will take effect.</p>
+
+              <p className="mb-2"><strong>3.2 Guardian or Legal Representative Consent (If applicable)</strong></p>
+              <p className="mb-1">Where a minor is represented by a parent, guardian, trustee, or legal representative ("Representative"), the following terms apply:</p>
+              <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
+                <li>The Representative warrants that they have the full legal authority to act on behalf of the minor/ward, including authority to enter into this agreement on behalf of the minor.</li>
+                <li>The Representative agrees to provide all relevant legal documentation evidencing such authority.</li>
+                <li>The Representative must inform the Fund/Portfolio Manager in writing of any change in the legal status, capacity, or authority related to the minor without delay.</li>
+                <li>Unless otherwise required by law or revoked in writing by a party with proper authority, this agreement remains in full effect and Alpha10 shall continue to act on instructions assuming the authority of the Representative remains valid.</li>
+              </ol>
+
+              <p className="mb-2"><strong>3.3 Instructions</strong></p>
+              <p className="mb-2">You agree that instructions must be received by Alpha10 before 1pm on any business day in order for a transaction to be processed on the same day. Instructions received after 1pm will be treated the next business day.</p>
+              <p className="mb-2">Instructions received on a weekend or public holiday will be taken as received on the following business day and treated accordingly.</p>
+              <p className="mb-2">You are responsible for ensuring that Alpha10 is in receipt of any instruction and that instructions are clear and intelligible.</p>
+              <p className="mb-2">Except to the extent that Alpha10 acted with gross negligence or with fraudulent intent, Alpha10 will not be liable for your failure to comply with this clause.</p>
+              <p className="mb-3">You agree that Alpha10 shall be entitled, but is not obliged, in its discretion, to confirm or authenticate any instruction which is not given online prior to effecting any transaction.</p>
+
+              <p className="mb-2"><strong>3.4 Payments</strong></p>
+              <p className="mb-2">Alpha10 will not effect any payments from the investment account other than to your designated bank account(s) as specified on the application form, or otherwise as notified to Alpha10 in writing and signed by you.</p>
+              <p className="mb-2">Provided that Alpha10 did not act with gross negligence or fraudulently, Alpha10 shall not be liable should it refuse to effect a payment otherwise than in accordance with this clause.</p>
+              <p className="mb-2">You warrant that the designated bank account(s) details supplied to Alpha10 from time to time are true and correct. You acknowledge that transaction processing may take up to 72 working hours.</p>
+              <p className="mb-2">Alpha10 is not liable, nor is it obliged, to verify or authenticate any bank account details supplied by your duly authorized signatory(ies). Except to the extent that Alpha10 acted with gross negligence or fraudulently.</p>
+              <p className="mb-3">You indemnify and hold Alpha10 harmless against any loss, damage, expense or claim which you or Alpha10 may sustain or incur as a result of payment(s) made in circumstances where the bank account details are not correct.</p>
+
+              <h5 className="font-bold text-foreground mt-4 mb-2">4. Third Party Indemnity</h5>
+              <p className="mb-2">Notwithstanding anything contained in these terms and conditions, Alpha10 may in its sole discretion permit payment to a third party.</p>
+              <p className="mb-3">You undertake to indemnify Alpha10 and hold it harmless from and against all cost (including without limitation legal fees and expenses), losses, liabilities, claims, damages and proceedings whatsoever that Alpha10 may suffer or incur or that may arise as a result of such third party payment.</p>
+
+              <h5 className="font-bold text-foreground mt-4 mb-2">5. Statements</h5>
+              <p className="mb-1">Alpha10 shall provide periodic statements to you which will, amongst others:</p>
+              <ol className="list-[lower-alpha] pl-5 mb-2 space-y-1">
+                <li>show all transactions relating to the investment account; and</li>
+                <li>show all interest/profit credited, and charges debited to the investment account.</li>
+              </ol>
+              <p className="mb-2">You undertake to monitor and verify the correctness of your investment account details on a regular basis and to inform Alpha10 immediately of any errors or inconsistencies in the details.</p>
+              <p className="mb-2">Unless you notify Alpha10 of any error or inconsistency within 60 days of the date of issue of the statement, such statement shall be deemed to be an accurate and correct record of your activity on the investment account.</p>
+              <p className="mb-3">Any record of deposit to the investment account is subject to verification by Alpha10 and should there be a discrepancy between your records and Alpha10's records, Alpha10 shall constitute sufficient proof of the correctness of Alpha10's contentions and the onus shall be on you to prove otherwise.</p>
+
+              <h5 className="font-bold text-foreground mt-4 mb-2">6. Personal Information</h5>
+              <p className="mb-1">You acknowledge and expressly consent that Alpha10 may:</p>
+              <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
+                <li>verify information provided by you to Alpha10 in this application or any other documentation and generally make whatever enquiries it deems necessary from any source whatsoever.</li>
+                <li>process your personal information to conclude the agreement and for purposes of maintaining the investment account, providing services to you and complying with your instructions.</li>
+                <li>disclose your personal information contained in the application form, and any other documentation in relation to any of your investment accounts to other entities within Alpha10 if you have applied for further accounts, products or services at any other entity within Alpha10.</li>
+                <li>process and disclose your personal information for purposes of the prevention, detection and reporting of fraud and criminal activities, the identification of the proceeds of unlawful activities and the combating of money laundering activities.</li>
+                <li>process the report on your personal information to comply with an obligation imposed by applicable laws on Alpha10.</li>
+              </ol>
             </>
           )}
         </div>
