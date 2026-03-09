@@ -138,8 +138,11 @@ export async function registerRoutes(
     const adminPassword = process.env.ADMIN_PASSWORD?.trim();
 
     if (!adminPassword) {
+      console.error("[admin/login] ADMIN_PASSWORD env var is not set");
       return res.status(500).json({ message: "Admin password not configured" });
     }
+
+    console.log(`[admin/login] password attempt from ${clientIp}, env var length=${adminPassword.length}`);
 
     if (password && password.trim() === adminPassword) {
       loginAttempts.delete(clientIp);

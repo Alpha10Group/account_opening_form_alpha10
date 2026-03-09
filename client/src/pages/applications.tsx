@@ -542,8 +542,10 @@ function AdminLoginForm({ onSuccess }: { onSuccess: () => void }) {
       onSuccess();
     },
     onError: (error: Error) => {
-      const msg = error.message.includes("429")
-        ? "Too many login attempts. Please wait and try again."
+      const msg = error.message.startsWith("429")
+        ? "Too many login attempts. Please wait 15 minutes and try again."
+        : error.message.startsWith("500")
+        ? "Server error — the admin password may not be configured yet. Please try again shortly."
         : "Invalid admin password. Please try again.";
       toast({ title: "Login Failed", description: msg, variant: "destructive" });
       setPassword("");
