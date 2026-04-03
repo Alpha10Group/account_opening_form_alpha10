@@ -323,7 +323,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
           </div>
 
           <div className="mt-6 pt-4 border-t">
-            <p className="text-sm font-semibold text-foreground mb-3">Primary Account Details</p>
+            <p className="text-sm font-semibold text-primary mb-3">Primary Account Details</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField control={form.control} name="primaryBankName" render={({ field }) => (
                 <FormItem>
@@ -357,7 +357,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
           </div>
 
           <div className="mt-6 pt-4 border-t">
-            <p className="text-sm font-semibold text-foreground mb-3">Secondary Account Details</p>
+            <p className="text-sm font-semibold text-primary mb-3">Secondary Account Details</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField control={form.control} name="secondaryBankName" render={({ field }) => (
                 <FormItem>
@@ -395,7 +395,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
           {directorFields.map((field, index) => (
             <div key={field.id} className="mb-6 last:mb-0">
               <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
-                <p className="text-sm font-medium text-muted-foreground">Director {index + 1}</p>
+                <p className="text-sm font-medium text-primary">Director {index + 1}</p>
                 {directorFields.length > 1 && (
                   <Button
                     type="button"
@@ -521,7 +521,7 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
           {signatoryFields.map((field, index) => (
             <div key={field.id} className="mb-6 last:mb-0">
               <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
-                <p className="text-sm font-medium text-muted-foreground">Signatory {index + 1}</p>
+                <p className="text-sm font-medium text-primary">Signatory {index + 1}</p>
                 {signatoryFields.length > 1 && (
                   <Button
                     type="button"

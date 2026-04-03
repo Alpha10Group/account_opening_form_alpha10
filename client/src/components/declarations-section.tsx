@@ -116,7 +116,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
 
         <div className={`grid gap-6 ${showSecondSignature ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2"}`}>
           <div className="space-y-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Account Holder's Signature</p>
+            <p className="text-xs font-medium text-primary uppercase tracking-wide">Account Holder's Signature</p>
             <FormField control={form.control} name={`${prefix}.signatureName`} render={({ field }) => (
               <FormItem>
                 <FormLabel>Full Name *</FormLabel>
@@ -132,13 +132,13 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
               </FormItem>
             )} />
             <div>
-              <p className="text-sm font-medium mb-2">Upload Signature</p>
+              <p className="text-sm font-medium mb-2 text-primary">Upload Signature</p>
               <FileUpload form={form} fieldName={`${prefix}.signatureFileUrl`} testId="signature" variant="signature" label="Click to upload signature" />
             </div>
           </div>
           {showSecondSignature && (
             <div className="space-y-4">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Account Holder's Signature (2nd)</p>
+              <p className="text-xs font-medium text-primary uppercase tracking-wide">Account Holder's Signature (2nd)</p>
               <FormField control={form.control} name={`${prefix}.secondSignatureName`} render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
@@ -154,7 +154,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 </FormItem>
               )} />
               <div>
-                <p className="text-sm font-medium mb-2">Upload Signature</p>
+                <p className="text-sm font-medium mb-2 text-primary">Upload Signature</p>
                 <FileUpload form={form} fieldName={`${prefix}.secondSignatureFileUrl`} testId="second-signature" variant="signature" label="Click to upload signature" />
               </div>
             </div>
@@ -255,7 +255,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
         <div className="max-h-96 overflow-y-auto p-4 rounded-md bg-muted/50 text-sm text-muted-foreground mb-4 leading-relaxed border" data-testid="terms-content">
           {accountType !== "corporate" ? (
             <>
-              <h4 className="font-bold text-foreground mb-3 text-base">TERMS AND CONDITIONS</h4>
+              <h4 className="font-bold text-primary mb-3 text-base">TERMS AND CONDITIONS</h4>
               <p className="mb-3">
                 This AGREEMENT is made this ____ day of __________
               </p>
@@ -296,14 +296,14 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 together constitute the terms of business which shall govern the provision by us to you of any regulated or ancillary activity.
               </p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">1. Authority</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">1. Authority</h5>
               <p className="mb-2">The Client hereby appoints Alpha10 to be the Client's Fund/Portfolio Manager and provide:</p>
               <div className="mb-1 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Discretionary Fund Management Services</span></div>
               <p className="mb-1 pl-5 text-xs">or</p>
               <div className="mb-3 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Non-discretionary Fund Management Services (Tick Box)</span></div>
               <p className="mb-3">as to the investment account(s) established by Client and managed by Alpha10.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">2. Investment Services</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">2. Investment Services</h5>
               <p className="mb-2"><strong>2.1 Discretionary Investment Services</strong></p>
               <p className="mb-3">
                 Alpha10 provides investment services targeted at Qualified Institutional Investors, High-Net-Worth Individuals, and Retail
@@ -337,7 +337,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 <li>The Client remains solely responsible for all tax obligations arising from investments made on their behalf.</li>
               </ol>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">3. Operation of the Investment Account</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">3. Operation of the Investment Account</h5>
               <p className="mb-2"><strong>3.1 Authority to Operate</strong></p>
               <p className="mb-3">
                 You warrant that you have the necessary authority to open and operate the investment account.
@@ -370,13 +370,13 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 Alpha10 is not liable for verifying bank account details supplied by your authorized signatory.
               </p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">4. Third Party Indemnity</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">4. Third Party Indemnity</h5>
               <p className="mb-3">
                 Alpha10 may in its discretion permit payment to a third party. You undertake to indemnify Alpha10 against any losses,
                 damages, claims, or expenses arising from such payment.
               </p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">5. Statements</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">5. Statements</h5>
               <p className="mb-1">Alpha10 shall provide periodic statements showing:</p>
               <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
                 <li>All transactions relating to the investment account.</li>
@@ -384,7 +384,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
               </ol>
               <p className="mb-3">Clients must notify Alpha10 of any error within 60 days.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">6. Personal Information</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">6. Personal Information</h5>
               <p className="mb-1">You acknowledge and consent that Alpha10 may:</p>
               <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
                 <li>Verify information provided by you.</li>
@@ -393,35 +393,35 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 <li>Report suspicious transactions or money laundering activities.</li>
               </ol>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">7. Interest / Profit Payment</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">7. Interest / Profit Payment</h5>
               <p className="mb-3">
                 Interest/Profit on investment shall be paid upfront, periodically, or at maturity depending on the agreed product.
               </p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">8. Liquidation Notice</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">8. Liquidation Notice</h5>
               <p className="mb-3">Liquidation instructions will be processed within 24 hours of receipt.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">9. Charges Payable</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">9. Charges Payable</h5>
               <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
                 <li>Premature liquidation may attract 25% or 35% penalty of accrued interest.</li>
                 <li>Upfront interest/profit may be deducted from principal where necessary.</li>
               </ol>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">10. Rollover Instruction</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">10. Rollover Instruction</h5>
               <p className="mb-3">
                 Upon maturity, where no contrary instruction is received, investment may be rolled over at the prevailing market rate.
               </p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">11. Withholding Tax (WHT)</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">11. Withholding Tax (WHT)</h5>
               <p className="mb-3">Interest/profit earned is subject to 10% withholding tax deduction where applicable.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">12. Dealing & Advice</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">12. Dealing & Advice</h5>
               <p className="mb-3">
                 Alpha10 may execute investment instructions on behalf of the Client. Investment advice provided does not constitute
                 a guarantee of performance.
               </p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">13. Fund / Portfolio Manager Liability</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">13. Fund / Portfolio Manager Liability</h5>
               <p className="mb-1">Alpha10 shall not disclaim liability arising from:</p>
               <ul className="list-disc pl-5 mb-3 space-y-1">
                 <li>Fraud</li>
@@ -430,13 +430,13 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 <li>Willful misconduct</li>
               </ul>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">14. Email Indemnity</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">14. Email Indemnity</h5>
               <p className="mb-3">
                 You authorize Alpha10 to act upon instructions sent via email. You agree to indemnify Alpha10 against losses
                 arising from electronic communications.
               </p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">15. Force Majeure</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">15. Force Majeure</h5>
               <p className="mb-1">Alpha10 shall not be liable for failure or delay in performance caused by events beyond its control including:</p>
               <ul className="list-disc pl-5 mb-3 space-y-1">
                 <li>Government actions</li>
@@ -444,7 +444,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 <li>Industrial disputes</li>
               </ul>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">16. Governing Law and Dispute Resolution</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">16. Governing Law and Dispute Resolution</h5>
               <p className="mb-3">
                 This Agreement shall be governed by the Investment and Securities Act and SEC Rules. Disputes shall first be resolved
                 amicably. Where unresolved, the matter may be referred to the SEC Administrative Proceedings Committee or Investment
@@ -453,7 +453,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
             </>
           ) : (
             <>
-              <h4 className="font-bold text-foreground mb-3 text-base">TERMS AND CONDITIONS</h4>
+              <h4 className="font-bold text-primary mb-3 text-base">TERMS AND CONDITIONS</h4>
               <p className="mb-3">This AGREEMENT is made this ____ day of __________</p>
               <p className="mb-1"><strong>Between</strong></p>
               <p className="mb-3 italic">
@@ -482,14 +482,14 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
               <p className="mb-2 italic text-xs">Without limiting the circumstances in which such agreement(s) and disclaimer(s) are binding on you, they are made binding on you by these Terms. These Terms will also supplement such agreement(s) and disclosure(s) to the extent that they do not conflict with such agreement(s) or disclaimer(s).</p>
               <p className="mb-3 italic text-xs">These Terms together with any other agreement, notice, disclaimers, disclosure or other special terms and conditions shall together constitute the terms of business which shall govern the provision by us to you of any regulated or ancillary activity.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">1. Authority</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">1. Authority</h5>
               <p className="mb-2">The Client hereby appoints Alpha10 to be the Client's Fund/Portfolio Manager and provide:</p>
               <div className="mb-1 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Discretionary Fund Management Services</span></div>
               <p className="mb-1 pl-5 text-xs">or</p>
               <div className="mb-3 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Non-discretionary Fund Management Services (Tick Box)</span></div>
               <p className="mb-3">as to the investment account(s) established by Client and managed by Alpha10.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">2. Investment Services</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">2. Investment Services</h5>
               <p className="mb-2"><strong>2.1 Discretionary Investment Services</strong></p>
               <p className="mb-2">Alpha10 provides investment services targeted at Qualified Institutional Investors, High-Net-Worth Individuals, and Retail Investors. These services include, without limitation, the management and execution of strategies within Alpha10's product offerings.</p>
               <p className="mb-2">Alpha10 agrees to work with Client or its designated representative to develop appropriate goals, objectives, risk tolerance, and standards for its Products/Services.</p>
@@ -516,7 +516,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
                 <li>The Client remains solely responsible for all tax obligations arising from investments made on their behalf.</li>
               </ol>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">3. Operation of the Investment Account</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">3. Operation of the Investment Account</h5>
               <p className="mb-2"><strong>3.1 Authority to Operate</strong></p>
               <p className="mb-2">You warrant that you have the necessary authority to open and operate the investment account.</p>
               <p className="mb-2">Alpha10 shall be entitled to rely on, and act in accordance with, instructions received from any person authorized to access or use the investment account by virtue of any authority, resolution, mandate or power of attorney ("authority") provided by you or your nominee to Alpha10.</p>
@@ -545,11 +545,11 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
               <p className="mb-2">Alpha10 is not liable, nor is it obliged, to verify or authenticate any bank account details supplied by your duly authorized signatory(ies). Except to the extent that Alpha10 acted with gross negligence or fraudulently.</p>
               <p className="mb-3">You indemnify and hold Alpha10 harmless against any loss, damage, expense or claim which you or Alpha10 may sustain or incur as a result of payment(s) made in circumstances where the bank account details are not correct.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">4. Third Party Indemnity</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">4. Third Party Indemnity</h5>
               <p className="mb-2">Notwithstanding anything contained in these terms and conditions, Alpha10 may in its sole discretion permit payment to a third party.</p>
               <p className="mb-3">You undertake to indemnify Alpha10 and hold it harmless from and against all cost (including without limitation legal fees and expenses), losses, liabilities, claims, damages and proceedings whatsoever that Alpha10 may suffer or incur or that may arise as a result of such third party payment.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">5. Statements</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">5. Statements</h5>
               <p className="mb-1">Alpha10 shall provide periodic statements to you which will, amongst others:</p>
               <ol className="list-[lower-alpha] pl-5 mb-2 space-y-1">
                 <li>show all transactions relating to the investment account; and</li>
@@ -559,7 +559,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
               <p className="mb-2">Unless you notify Alpha10 of any error or inconsistency within 60 days of the date of issue of the statement, such statement shall be deemed to be an accurate and correct record of your activity on the investment account.</p>
               <p className="mb-3">Any record of deposit to the investment account is subject to verification by Alpha10 and should there be a discrepancy between your records and Alpha10's records, Alpha10 shall constitute sufficient proof of the correctness of Alpha10's contentions and the onus shall be on you to prove otherwise.</p>
 
-              <h5 className="font-bold text-foreground mt-4 mb-2">6. Personal Information</h5>
+              <h5 className="font-bold text-primary mt-4 mb-2">6. Personal Information</h5>
               <p className="mb-1">You acknowledge and expressly consent that Alpha10 may:</p>
               <ol className="list-[lower-alpha] pl-5 mb-3 space-y-1">
                 <li>verify information provided by you to Alpha10 in this application or any other documentation and generally make whatever enquiries it deems necessary from any source whatsoever.</li>

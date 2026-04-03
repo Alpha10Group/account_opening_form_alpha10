@@ -139,10 +139,10 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
           <div className="border-r border-gray-200 p-3 space-y-4">
             {/* Mutual Funds */}
             <div>
-              <p className="text-xs font-bold text-gray-900 mb-2">MUTUAL FUNDS</p>
+              <p className="text-xs font-bold text-primary mb-2">MUTUAL FUNDS</p>
               <MultiCheckboxField form={form} fieldName={`${prefix}.mutualFunds`} options={MUTUAL_FUNDS} testPrefix="mutual-funds" />
               <div className="mt-2">
-                <p className="text-xs font-semibold text-gray-800 mb-1">Income Distribution</p>
+                <p className="text-xs font-semibold text-primary mb-1">Income Distribution</p>
                 <FormField
                   control={form.control}
                   name={`${prefix}.incomeDistribution`}
@@ -172,7 +172,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
             {/* Asset Management Discretionary NGN */}
             <div>
               <p className="text-xs font-bold text-primary mb-1">ASSET MANAGEMENT</p>
-              <p className="text-xs font-bold text-gray-900 mb-2">DISCRETIONARY OPTIONS (NGN)</p>
+              <p className="text-xs font-bold text-primary mb-2">DISCRETIONARY OPTIONS (NGN)</p>
               <MultiCheckboxField form={form} fieldName={`${prefix}.discretionaryNGN`} options={DISCRETIONARY_NGN} testPrefix="disc-ngn" />
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
           <div className="border-r border-gray-200 p-3 space-y-4">
             {/* Non-Discretionary Options - 2 sub-columns */}
             <div>
-              <p className="text-xs font-bold text-gray-900 mb-2">NON-DISCRETIONARY OPTIONS</p>
+              <p className="text-xs font-bold text-primary mb-2">NON-DISCRETIONARY OPTIONS</p>
               <FormField
                 control={form.control}
                 name={`${prefix}.nonDiscretionary`}
@@ -223,13 +223,13 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
 
             {/* Discretionary Options Foreign Currency */}
             <div>
-              <p className="text-xs font-bold text-gray-900 mb-2">DISCRETIONARY OPTIONS<br />(FOREIGN CURRENCY)</p>
+              <p className="text-xs font-bold text-primary mb-2">DISCRETIONARY OPTIONS<br />(FOREIGN CURRENCY)</p>
               <MultiCheckboxField form={form} fieldName={`${prefix}.discretionaryForeign`} options={DISCRETIONARY_FOREIGN} testPrefix="disc-foreign" />
             </div>
 
             {/* Sharia Complaint Options */}
             <div>
-              <p className="text-xs font-bold text-gray-900 mb-2">SHARIA COMPLAINT OPTIONS<br />(DISCRETIONARY)</p>
+              <p className="text-xs font-bold text-primary mb-2">SHARIA COMPLAINT OPTIONS<br />(DISCRETIONARY)</p>
               <MultiCheckboxField form={form} fieldName={`${prefix}.shariaCompliant`} options={SHARIA_COMPLIANT} testPrefix="sharia" />
             </div>
           </div>
@@ -238,7 +238,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
           <div className="p-3 space-y-4">
             {/* Separately Managed Account */}
             <div>
-              <p className="text-xs font-bold text-gray-900 mb-2">SEPARATELY MANAGED ACCOUNT</p>
+              <p className="text-xs font-bold text-primary mb-2">SEPARATELY MANAGED ACCOUNT</p>
               <FormField
                 control={form.control}
                 name={`${prefix}.separatelyManaged`}
@@ -326,7 +326,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
 
             {/* Securities Trading */}
             <div>
-              <p className="text-xs font-bold text-gray-900 mb-2">SECURITIES TRADING</p>
+              <p className="text-xs font-bold text-primary mb-2">SECURITIES TRADING</p>
               <MultiCheckboxField form={form} fieldName={`${prefix}.securitiesTrading`} options={SECURITIES_TRADING} testPrefix="sec-trading" />
             </div>
           </div>
@@ -334,7 +334,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
 
         {/* Risk Disclosure Statement */}
         <div className="border border-gray-200 p-3">
-          <p className="text-xs font-bold text-gray-900 mb-1">RISK DISCLOSURE STATEMENT (EQUITIES CLIENTS ONLY)</p>
+          <p className="text-xs font-bold text-primary mb-1">RISK DISCLOSURE STATEMENT (EQUITIES CLIENTS ONLY)</p>
           <p className="text-[11px] text-gray-700 leading-snug mb-3">
             Investments in securities are subject to risk, including the possible loss of capital. The client confirms receipt and understanding of the Company's Risk Disclosure Statement and acknowledges that, except where otherwise agreed in writing, all investments are made at the Client's own risk.
           </p>
@@ -420,7 +420,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
             render={({ field }) => (
               <FormItem>
                 <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-2 items-start">
-                  <label className="text-xs font-semibold text-gray-900 pt-1">Client's Risk Profile</label>
+                  <label className="text-xs font-semibold text-primary pt-1">Client's Risk Profile</label>
                   <div className="grid grid-cols-3 gap-3">
                     {[
                       {
@@ -467,7 +467,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
             render={({ field }) => (
               <FormItem>
                 <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-2 items-center">
-                  <label className="text-xs font-semibold text-gray-900">Investment Horizon</label>
+                  <label className="text-xs font-semibold text-primary">Investment Horizon</label>
                   <div className="flex items-center gap-6">
                     {["Short term", "Medium term", "Long term"].map((horizon) => (
                       <div key={horizon} className="flex items-center gap-1.5">
@@ -496,7 +496,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
               return (
                 <FormItem>
                   <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-2 items-center">
-                    <label className="text-xs font-semibold text-gray-900">Investment Objectives</label>
+                    <label className="text-xs font-semibold text-primary">Investment Objectives</label>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                       {INVESTMENT_OBJECTIVES.map((obj) => (
                         <div key={obj} className="flex items-center gap-1.5">
