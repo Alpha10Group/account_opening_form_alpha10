@@ -88,7 +88,7 @@ export async function registerRoutes(
     throw new Error("SESSION_SECRET environment variable is required");
   }
 
-  const sessionTtlMs = 7 * 24 * 60 * 60 * 1000;
+  const sessionTtlMs = 8 * 60 * 60 * 1000; // 8 hours server-side TTL
 
   const PgStore = connectPgSimple(session);
   const pgPool = new pg.Pool({
@@ -101,6 +101,7 @@ export async function registerRoutes(
         pool: pgPool,
         tableName: "user_sessions",
         createTableIfMissing: true,
+        ttl: sessionTtlMs / 1000, // in seconds
       }),
       secret: process.env.SESSION_SECRET,
       resave: false,
@@ -110,7 +111,7 @@ export async function registerRoutes(
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax" as const,
-        maxAge: sessionTtlMs,
+        // No maxAge — cookie expires when browser is closed
       },
     })
   );
