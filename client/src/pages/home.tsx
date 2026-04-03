@@ -37,9 +37,22 @@ const accountOptions = [
   },
 ];
 
+function getInitialState(): { selectedType: AccountType; viewState: ViewState } {
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type") as AccountType;
+  if (params.get("submitted") === "true") {
+    return { selectedType: null, viewState: "success" };
+  }
+  if (type === "individual" || type === "joint" || type === "corporate") {
+    return { selectedType: type, viewState: "form" };
+  }
+  return { selectedType: null, viewState: "selection" };
+}
+
 export default function Home() {
-  const [selectedType, setSelectedType] = useState<AccountType>(null);
-  const [viewState, setViewState] = useState<ViewState>("selection");
+  const initial = getInitialState();
+  const [selectedType, setSelectedType] = useState<AccountType>(initial.selectedType);
+  const [viewState, setViewState] = useState<ViewState>(initial.viewState);
   const [referenceNumber, setReferenceNumber] = useState("");
 
   const goToSelection = useCallback(() => {
