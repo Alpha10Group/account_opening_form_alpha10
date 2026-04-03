@@ -30,6 +30,11 @@ export const productsServicesSchema = z.object({
   advisoryServices: z.string().optional(),
   initialInvestmentAmount: z.string().optional(),
   clientRiskProfile: z.enum(["low", "medium", "high"]).optional(),
+  investmentHorizon: z.string().optional(),
+  investmentObjectives: z.array(z.string()).optional(),
+  riskDisclosureName: z.string().optional(),
+  riskDisclosureSignature: z.string().optional(),
+  riskDisclosureDate: z.string().optional(),
 });
 
 export const declarationsSchema = z.object({
