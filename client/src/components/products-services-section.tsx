@@ -1,6 +1,7 @@
 import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import FileUpload from "./file-upload";
 import FormSection from "./form-section";
 
 interface ProductsServicesSectionProps {
@@ -356,24 +357,16 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name={`${prefix}.riskDisclosureSignature`}
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-end gap-2">
-                    <label className="text-xs font-semibold shrink-0">SIGNATURE</label>
-                    <div className="flex-1 border-b border-gray-400">
-                      <Input
-                        data-testid="input-risk-signature"
-                        className="border-0 border-b-0 rounded-none h-6 text-xs px-0 focus-visible:ring-0 bg-transparent"
-                        {...field}
-                      />
-                    </div>
-                  </div>
-                </FormItem>
-              )}
-            />
+            <div>
+              <label className="text-xs font-semibold block mb-1">SIGNATURE</label>
+              <FileUpload
+                form={form}
+                fieldName={`${prefix}.riskDisclosureSignature`}
+                testId="risk-disclosure-signature"
+                variant="signature"
+                label="Click to upload signature"
+              />
+            </div>
             <FormField
               control={form.control}
               name={`${prefix}.riskDisclosureDate`}
