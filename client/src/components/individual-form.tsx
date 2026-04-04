@@ -776,8 +776,6 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
           </div>
         </div>
 
-        <DeclarationsSection form={form} prefix="declarations" accountType="individual" hideIndemnity={true} />
-
         <ProductsServicesSection form={form} prefix="productsServices" />
 
         {/* INDEMNITY FOR REDEMPTION REQUESTS */}
@@ -887,6 +885,8 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
         </div>
 
         <BankDetailsSection />
+
+        <DeclarationsSection form={form} prefix="declarations" accountType="individual" hideIndemnity={true} />
 
         <div className="flex justify-end gap-4 pt-6 pb-8">
           <Button type="submit" disabled={submitMutation.isPending} data-testid="button-submit">
