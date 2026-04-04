@@ -405,7 +405,6 @@ export default function CorporateForm({ onSuccess }: CorporateFormProps) {
           <div className="text-center py-3 border-b border-gray-300">
             <div className="font-bold text-lg uppercase">Account Opening Form</div>
             <div className="font-bold text-sm uppercase">Corporate</div>
-            <div className="text-xs">(TO BE COMPLETED IN CAPITAL LETTERS)</div>
           </div>
 
           {/* Date */}
