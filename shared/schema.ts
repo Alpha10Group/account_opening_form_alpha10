@@ -135,6 +135,29 @@ export const individualFormSchema = z.object({
   nextOfKinDateOfBirth: z.string().optional(),
   nextOfKinGender: z.enum(["male", "female"]).optional(),
 
+  onlineAccess: z.enum(["yes", "no"]).optional(),
+  emailNotifications: z.enum(["yes", "no"]).optional(),
+
+  adultSponsor1Name: z.string().optional(),
+  adultSponsor1Relationship: z.string().optional(),
+  adultSponsor1Email: z.string().optional(),
+  adultSponsor1Phone: z.string().optional(),
+  adultSponsor1Address: z.string().optional(),
+  adultSponsor2Name: z.string().optional(),
+  adultSponsor2Relationship: z.string().optional(),
+  adultSponsor2Email: z.string().optional(),
+  adultSponsor2Phone: z.string().optional(),
+  adultSponsor2Address: z.string().optional(),
+
+  indemnityEmail1: z.string().optional(),
+  indemnityEmail2: z.string().optional(),
+  indemnityPhone1: z.string().optional(),
+  indemnityPhone2: z.string().optional(),
+  indemnitySignature1Url: z.string().optional(),
+  indemnitySignatureDate1: z.string().optional(),
+  indemnitySignature2Url: z.string().optional(),
+  indemnitySignatureDate2: z.string().optional(),
+
   productsServices: productsServicesSchema.optional(),
 
   declarations: declarationsSchema,

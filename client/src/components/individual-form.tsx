@@ -108,6 +108,26 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
       nextOfKinEmail: "",
       nextOfKinDateOfBirth: "",
       nextOfKinGender: undefined,
+      onlineAccess: undefined,
+      emailNotifications: undefined,
+      adultSponsor1Name: "",
+      adultSponsor1Relationship: "",
+      adultSponsor1Email: "",
+      adultSponsor1Phone: "",
+      adultSponsor1Address: "",
+      adultSponsor2Name: "",
+      adultSponsor2Relationship: "",
+      adultSponsor2Email: "",
+      adultSponsor2Phone: "",
+      adultSponsor2Address: "",
+      indemnityEmail1: "",
+      indemnityEmail2: "",
+      indemnityPhone1: "",
+      indemnityPhone2: "",
+      indemnitySignature1Url: "",
+      indemnitySignatureDate1: "",
+      indemnitySignature2Url: "",
+      indemnitySignatureDate2: "",
       productsServices: {
         discretionaryNGN: [],
         discretionaryForeign: [],
@@ -589,13 +609,22 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                     variant="photo"
                   />
                 </div>
-                <div className="flex flex-col gap-5 flex-1">
+                <div className="flex flex-col gap-3 flex-1">
                   <div>
-                    <div className="h-14 border-b-2 border-r-2 border-primary w-full"></div>
+                    <div className="border-2 border-gray-400 p-1 min-h-[56px] flex items-center justify-center">
+                      <FileUpload
+                        form={form}
+                        fieldName="declarations.signatureFileUrl"
+                        testId="signatureFileUrl"
+                        label="Upload Signature"
+                        description="PNG, JPG (max 2MB)"
+                        variant="signature"
+                      />
+                    </div>
                     <p className="text-[10px] text-gray-600 mt-1">Signature</p>
                   </div>
                   <div>
-                    <div className="h-10 border-b-2 border-r-2 border-primary w-full flex items-end px-1">
+                    <div className="border-b-2 border-r-2 border-primary h-8 flex items-end px-1">
                       <input
                         type="date"
                         {...register("declarations.signatureDate")}
@@ -625,13 +654,22 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                     variant="photo"
                   />
                 </div>
-                <div className="flex flex-col gap-5 flex-1">
+                <div className="flex flex-col gap-3 flex-1">
                   <div>
-                    <div className="h-14 border-b-2 border-r-2 border-primary w-full"></div>
+                    <div className="border-2 border-gray-400 p-1 min-h-[56px] flex items-center justify-center">
+                      <FileUpload
+                        form={form}
+                        fieldName="declarations.secondSignatureFileUrl"
+                        testId="secondSignatureFileUrl"
+                        label="Upload Signature"
+                        description="PNG, JPG (max 2MB)"
+                        variant="signature"
+                      />
+                    </div>
                     <p className="text-[10px] text-gray-600 mt-1">Signature</p>
                   </div>
                   <div>
-                    <div className="h-10 border-b-2 border-r-2 border-primary w-full flex items-end px-1">
+                    <div className="border-b-2 border-r-2 border-primary h-8 flex items-end px-1">
                       <input
                         type="date"
                         {...register("declarations.secondSignatureDate")}
@@ -645,9 +683,194 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
               </div>
             </div>
           </div>
+
+          {/* ONLINE ACCOUNT ACCESS & NOTIFICATIONS */}
+          <PaperHeader>Online Account Access &amp; Notifications</PaperHeader>
+          <div className="px-3 py-3 border-b border-gray-300 space-y-3">
+            <div className="flex items-center gap-4 text-sm flex-wrap">
+              <span>Please confirm that you require online access to your account:</span>
+              <span className="text-[10px] text-gray-500 italic">(tick-box)</span>
+              {[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }].map(opt => (
+                <label key={opt.value} className="flex items-center gap-1 text-xs cursor-pointer">
+                  <input type="radio" value={opt.value} {...register("onlineAccess")} className="accent-primary" />
+                  <span>{opt.label}</span>
+                </label>
+              ))}
+            </div>
+            <div className="flex items-center gap-4 text-sm flex-wrap">
+              <span>Please confirm that you require e-mail notifications:</span>
+              <span className="text-[10px] text-gray-500 italic">(tick-box)</span>
+              {[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }].map(opt => (
+                <label key={opt.value} className="flex items-center gap-1 text-xs cursor-pointer">
+                  <input type="radio" value={opt.value} {...register("emailNotifications")} className="accent-primary" />
+                  <span>{opt.label}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-xs font-bold uppercase">If applicant is a minor (below 18 years old), an adult sponsor is required</p>
+          </div>
+
+          {/* ADULT SPONSOR(S) INFORMATION */}
+          <PaperHeader>Adult Sponsor(s) Information</PaperHeader>
+          <div className="grid grid-cols-2 gap-0 border-b border-gray-300">
+            {[
+              {
+                label: "ADULT SPONSOR 1",
+                fields: {
+                  name: "adultSponsor1Name",
+                  relationship: "adultSponsor1Relationship",
+                  email: "adultSponsor1Email",
+                  phone: "adultSponsor1Phone",
+                  address: "adultSponsor1Address",
+                },
+              },
+              {
+                label: "ADULT SPONSOR 2",
+                fields: {
+                  name: "adultSponsor2Name",
+                  relationship: "adultSponsor2Relationship",
+                  email: "adultSponsor2Email",
+                  phone: "adultSponsor2Phone",
+                  address: "adultSponsor2Address",
+                },
+              },
+            ].map((sponsor, idx) => (
+              <div key={idx} className={idx === 0 ? "border-r border-gray-300" : ""}>
+                <div className="px-2 pt-2 pb-1 text-[10px] font-bold text-gray-700 uppercase">{sponsor.label}</div>
+                {[
+                  { key: "name", label: "Name:" },
+                  { key: "relationship", label: "Relationship:" },
+                  { key: "email", label: "E-mail:" },
+                  { key: "phone", label: "Phone No:" },
+                ].map(({ key, label }) => (
+                  <div key={key} className="border-t border-gray-300 px-2 py-1 min-h-[36px] flex flex-col">
+                    <span className="text-[10px] text-gray-500">{label}</span>
+                    <input
+                      {...register(sponsor.fields[key as keyof typeof sponsor.fields] as any)}
+                      className="w-full text-xs focus:outline-none uppercase bg-transparent flex-1"
+                    />
+                  </div>
+                ))}
+                <div className="border-t border-gray-300 px-2 py-1 min-h-[52px] flex flex-col">
+                  <span className="text-[10px] text-gray-500">Contact Address:</span>
+                  <input
+                    {...register(sponsor.fields.address as any)}
+                    className="w-full text-xs focus:outline-none uppercase bg-transparent flex-1"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <ProductsServicesSection form={form} prefix="productsServices" />
+
+        {/* INDEMNITY FOR REDEMPTION REQUESTS */}
+        <div className="border-2 border-gray-300 bg-white text-gray-900">
+          <PaperHeader>Indemnity for Redemption Requests/Instructions Sent by Clients Through Electronic Mail</PaperHeader>
+          <div className="px-3 py-3 space-y-3 text-xs leading-relaxed">
+            <p>
+              I/We hereby authorize Alpha10, its affiliates and subsidiaries to honour redemption requests and instructions
+              sent by electronic mail and text messages in respect of my/our investment holdings in the company and in this
+              regard, confirm
+            </p>
+
+            {/* Email addresses row */}
+            <div className="flex flex-wrap items-end gap-3 border-b border-gray-300 pb-3">
+              <div className="flex-1 min-w-[200px]">
+                <span className="text-[10px] text-gray-500 font-semibold block text-center mb-0.5">Email address</span>
+                <input
+                  {...register("indemnityEmail1")}
+                  type="email"
+                  placeholder="email@example.com"
+                  data-testid="input-indemnity-email1"
+                  className="w-full border border-gray-400 px-2 py-1 text-xs focus:outline-none focus:border-primary"
+                />
+              </div>
+              <span className="text-xs mb-1">and</span>
+              <div className="flex-1 min-w-[200px]">
+                <span className="text-[10px] text-gray-500 font-semibold block text-center mb-0.5">Email address</span>
+                <input
+                  {...register("indemnityEmail2")}
+                  type="email"
+                  placeholder="email@example.com"
+                  data-testid="input-indemnity-email2"
+                  className="w-full border border-gray-400 px-2 py-1 text-xs focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+
+            {/* Phone numbers row */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span>as my/our designated email address(es) and</span>
+              <div className="min-w-[160px]">
+                <input
+                  {...register("indemnityPhone1")}
+                  placeholder="Phone Number"
+                  data-testid="input-indemnity-phone1"
+                  className="w-full border border-gray-400 px-2 py-1 text-xs focus:outline-none focus:border-primary"
+                />
+                <span className="text-[10px] text-gray-500 font-semibold block text-center">Phone Number</span>
+              </div>
+              <span>and</span>
+              <div className="min-w-[160px]">
+                <input
+                  {...register("indemnityPhone2")}
+                  placeholder="Phone Number"
+                  data-testid="input-indemnity-phone2"
+                  className="w-full border border-gray-400 px-2 py-1 text-xs focus:outline-none focus:border-primary"
+                />
+                <span className="text-[10px] text-gray-500 font-semibold block text-center">Phone Number</span>
+              </div>
+              <span>as my designated contact number for this purpose.</span>
+            </div>
+
+            <p>
+              While Alpha10 will take internal measures to verify electronic communications, I/we inconsideration of
+              Alpha10 honouring my/our requests and instructions sent by electronic mail, hereby undertake to indemnify
+              the company and its affiliates and subsidiaries against any losses, liabilities, damages, claims,
+              proceedings, cost or expenses of whatever that may be incurred by the company as a result of any issue
+              arising from the honouring of my/our redemption requests and instructions sent by electronic mail from
+              my/our designated <strong>email address(es) stated above.</strong>
+            </p>
+
+            {/* Signature boxes */}
+            <div className="grid grid-cols-2 gap-6 pt-2">
+              {[
+                { sigUrl: "indemnitySignature1Url", sigDate: "indemnitySignatureDate1", testIdDate: "input-indemnity-sig1-date" },
+                { sigUrl: "indemnitySignature2Url", sigDate: "indemnitySignatureDate2", testIdDate: "input-indemnity-sig2-date" },
+              ].map((sig, idx) => (
+                <div key={idx} className="flex gap-3">
+                  <div className="flex-1">
+                    <div className="border border-gray-400 min-h-[60px] flex items-center justify-center p-1">
+                      <FileUpload
+                        form={form}
+                        fieldName={sig.sigUrl}
+                        testId={sig.sigUrl}
+                        label="Upload Signature"
+                        description=""
+                        variant="signature"
+                      />
+                    </div>
+                    <p className="text-[10px] text-primary mt-1">Account Holder's Signature</p>
+                  </div>
+                  <div className="w-32">
+                    <div className="border border-gray-400 min-h-[60px] flex items-end px-1 pb-1">
+                      <input
+                        type="date"
+                        {...register(sig.sigDate as any)}
+                        data-testid={sig.testIdDate}
+                        className="w-full text-xs focus:outline-none bg-transparent"
+                      />
+                    </div>
+                    <p className="text-[10px] text-primary mt-1">Date</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <BankDetailsSection />
         <DeclarationsSection form={form} prefix="declarations" accountType="individual" />
 
