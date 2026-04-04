@@ -390,9 +390,7 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
 
         {/* Advisory Services */}
         <div className="border border-gray-200 p-3 space-y-4">
-          <div className="flex items-end gap-3">
-            <div className="w-[18%] border-b border-gray-400 min-h-[22px]" />
-            <div className="w-[28%] border-b border-gray-400 min-h-[22px]" />
+          <div className="flex items-end gap-2">
             <p className="text-xs font-bold text-primary shrink-0 pb-0.5">ADVISORY SERVICES:</p>
             <FormField
               control={form.control}
