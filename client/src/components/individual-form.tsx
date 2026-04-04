@@ -212,7 +212,6 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
             </div>
             <div className="flex-1 text-center">
               <div className="font-bold text-sm">INDIVIDUAL/JOINT</div>
-              <div className="text-xs">(TO BE COMPLETED IN CAPITAL LETTERS)</div>
             </div>
             <div className="flex-none w-24" />
           </div>
