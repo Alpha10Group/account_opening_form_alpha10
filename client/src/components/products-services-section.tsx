@@ -390,7 +390,24 @@ export default function ProductsServicesSection({ form, prefix }: ProductsServic
 
         {/* Advisory Services */}
         <div className="border border-gray-200 p-3 space-y-4">
-          <p className="text-xs font-bold text-primary">ADVISORY SERVICES</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-bold text-primary shrink-0">ADVISORY SERVICES</p>
+            <FormField
+              control={form.control}
+              name={`${prefix}.advisoryServices`}
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormControl>
+                    <input
+                      data-testid="input-advisory-services"
+                      className="w-full border-b border-gray-400 text-xs focus:outline-none bg-transparent pb-0.5"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
 
           {/* Initial Investment Amount */}
           <FormField

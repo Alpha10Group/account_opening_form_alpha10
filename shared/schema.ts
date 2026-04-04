@@ -62,6 +62,7 @@ export const declarationsSchema = z.object({
 
 export const individualFormSchema = z.object({
   accountType: z.literal("individual"),
+  applicationDate: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   surname: z.string().min(1, "Surname is required"),
   firstName: z.string().min(1, "First name is required"),

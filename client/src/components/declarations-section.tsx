@@ -11,6 +11,7 @@ interface DeclarationsSectionProps {
   prefix: string;
   showSecondSignature?: boolean;
   accountType?: "individual" | "joint" | "corporate";
+  hideIndemnity?: boolean;
 }
 
 const declarationItems = [
@@ -44,7 +45,7 @@ const declarationItems = [
   },
 ];
 
-export default function DeclarationsSection({ form, prefix, showSecondSignature = false, accountType = "individual" }: DeclarationsSectionProps) {
+export default function DeclarationsSection({ form, prefix, showSecondSignature = false, accountType = "individual", hideIndemnity = false }: DeclarationsSectionProps) {
   const isPep = form.watch(`${prefix}.isPoliticallyExposed`);
   const isFatca = form.watch(`${prefix}.isFatcaApplicable`);
 
@@ -78,6 +79,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
         </div>
       </FormSection>
 
+      {!hideIndemnity && (
       <FormSection
         title="Indemnity for Redemption Requests/Instructions Sent by Clients Through Electronic Mail"
         description="Electronic communication indemnity clause"
@@ -161,6 +163,7 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
           )}
         </div>
       </FormSection>
+      )}
 
       <FormSection title="Politically Exposed Person (PEP) Status" description="Regulatory requirement">
         <FormField

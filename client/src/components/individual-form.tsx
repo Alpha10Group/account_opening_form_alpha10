@@ -45,6 +45,7 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
     resolver: zodResolver(individualFormSchema),
     defaultValues: {
       accountType: "individual",
+      applicationDate: "",
       title: "",
       surname: "",
       firstName: "",
@@ -150,7 +151,7 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
         declareMaterialChange: false,
         declarePastPerformance: false,
         declareInfoComplete: false,
-        indemnityAccepted: false,
+        indemnityAccepted: true,
         termsAccepted: false,
         signatureName: "",
         signatureDate: "",
@@ -198,10 +199,22 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="border-2 border-gray-300 bg-white text-gray-900">
 
-          {/* Form title */}
-          <div className="text-center py-2 border-b border-gray-300">
-            <div className="font-bold text-sm">INDIVIDUAL/JOINT</div>
-            <div className="text-xs">(TO BE COMPLETED IN CAPITAL LETTERS)</div>
+          {/* Form title + Date */}
+          <div className="flex items-start px-3 py-2 border-b border-gray-300 gap-4">
+            <div className="flex-none">
+              <div className="text-[10px] text-gray-600 mb-1">Date: (DD/ MM/ YYYY) :</div>
+              <input
+                type="date"
+                {...register("applicationDate")}
+                data-testid="input-application-date"
+                className="border border-gray-400 text-xs px-1 py-0.5 focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div className="flex-1 text-center">
+              <div className="font-bold text-sm">INDIVIDUAL/JOINT</div>
+              <div className="text-xs">(TO BE COMPLETED IN CAPITAL LETTERS)</div>
+            </div>
+            <div className="flex-none w-24" />
           </div>
 
           {/* BVN */}
@@ -763,6 +776,8 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
           </div>
         </div>
 
+        <DeclarationsSection form={form} prefix="declarations" accountType="individual" hideIndemnity={true} />
+
         <ProductsServicesSection form={form} prefix="productsServices" />
 
         {/* INDEMNITY FOR REDEMPTION REQUESTS */}
@@ -872,7 +887,6 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
         </div>
 
         <BankDetailsSection />
-        <DeclarationsSection form={form} prefix="declarations" accountType="individual" />
 
         <div className="flex justify-end gap-4 pt-6 pb-8">
           <Button type="submit" disabled={submitMutation.isPending} data-testid="button-submit">
