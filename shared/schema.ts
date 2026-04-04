@@ -47,6 +47,8 @@ export const declarationsSchema = z.object({
   declareInfoComplete: z.boolean().refine(v => v === true, "You must declare information is complete"),
   indemnityAccepted: z.boolean().refine(v => v === true, "You must accept the indemnity clause"),
   termsAccepted: z.boolean().refine(v => v === true, "You must accept the terms and conditions"),
+  authorityDiscretionary: z.boolean().optional(),
+  authorityNonDiscretionary: z.boolean().optional(),
   signatureName: z.string().min(1, "Signature name is required"),
   signatureDate: z.string().min(1, "Signature date is required"),
   signatureFileUrl: z.string().optional(),

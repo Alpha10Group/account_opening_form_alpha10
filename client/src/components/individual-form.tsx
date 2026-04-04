@@ -153,6 +153,8 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
         declareInfoComplete: false,
         indemnityAccepted: true,
         termsAccepted: false,
+        authorityDiscretionary: false,
+        authorityNonDiscretionary: false,
         signatureName: "",
         signatureDate: "",
         signatureFileUrl: "",

@@ -434,6 +434,8 @@ export default function JointForm({ onSuccess }: JointFormProps) {
         declareInfoComplete: false,
         indemnityAccepted: true,
         termsAccepted: false,
+        authorityDiscretionary: false,
+        authorityNonDiscretionary: false,
         signatureName: "",
         signatureDate: "",
         signatureFileUrl: "",

@@ -301,9 +301,15 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
 
               <h5 className="font-bold text-primary mt-4 mb-2">1. Authority</h5>
               <p className="mb-2">The Client hereby appoints Alpha10 to be the Client's Fund/Portfolio Manager and provide:</p>
-              <div className="mb-1 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Discretionary Fund Management Services</span></div>
+              <label className="mb-1 flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" {...form.register(`${prefix}.authorityDiscretionary`)} data-testid="checkbox-authority-discretionary" className="w-3 h-3 accent-primary flex-shrink-0" />
+                <span>Discretionary Fund Management Services</span>
+              </label>
               <p className="mb-1 pl-5 text-xs">or</p>
-              <div className="mb-3 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Non-discretionary Fund Management Services (Tick Box)</span></div>
+              <label className="mb-3 flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" {...form.register(`${prefix}.authorityNonDiscretionary`)} data-testid="checkbox-authority-non-discretionary" className="w-3 h-3 accent-primary flex-shrink-0" />
+                <span>Non-discretionary Fund Management Services (Tick Box)</span>
+              </label>
               <p className="mb-3">as to the investment account(s) established by Client and managed by Alpha10.</p>
 
               <h5 className="font-bold text-primary mt-4 mb-2">2. Investment Services</h5>
@@ -487,9 +493,15 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
 
               <h5 className="font-bold text-primary mt-4 mb-2">1. Authority</h5>
               <p className="mb-2">The Client hereby appoints Alpha10 to be the Client's Fund/Portfolio Manager and provide:</p>
-              <div className="mb-1 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Discretionary Fund Management Services</span></div>
+              <label className="mb-1 flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" {...form.register(`${prefix}.authorityDiscretionary`)} data-testid="checkbox-authority-discretionary-joint" className="w-3 h-3 accent-primary flex-shrink-0" />
+                <span>Discretionary Fund Management Services</span>
+              </label>
               <p className="mb-1 pl-5 text-xs">or</p>
-              <div className="mb-3 flex items-center gap-2"><span className="border border-current inline-block w-3 h-3 flex-shrink-0" /> <span>Non-discretionary Fund Management Services (Tick Box)</span></div>
+              <label className="mb-3 flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" {...form.register(`${prefix}.authorityNonDiscretionary`)} data-testid="checkbox-authority-non-discretionary-joint" className="w-3 h-3 accent-primary flex-shrink-0" />
+                <span>Non-discretionary Fund Management Services (Tick Box)</span>
+              </label>
               <p className="mb-3">as to the investment account(s) established by Client and managed by Alpha10.</p>
 
               <h5 className="font-bold text-primary mt-4 mb-2">2. Investment Services</h5>
