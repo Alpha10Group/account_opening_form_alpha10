@@ -537,11 +537,11 @@ export default function IndividualForm({ onSuccess }: IndividualFormProps) {
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl><SelectTrigger data-testid="select-income"><SelectValue placeholder="Select range" /></SelectTrigger></FormControl>
                   <SelectContent>
-                    <SelectItem value="below_500k">Below N500,000</SelectItem>
-                    <SelectItem value="500k_1m">N500,000 - N1,000,000</SelectItem>
-                    <SelectItem value="1m_5m">N1,000,000 - N5,000,000</SelectItem>
-                    <SelectItem value="5m_10m">N5,000,000 - N10,000,000</SelectItem>
-                    <SelectItem value="above_10m">Above N10,000,000</SelectItem>
+                    <SelectItem value="below_5m">Below ₦5,000,000</SelectItem>
+                    <SelectItem value="5m_10m">₦5,000,000 - ₦10,000,000</SelectItem>
+                    <SelectItem value="10m_50m">₦10,000,000 - ₦50,000,000</SelectItem>
+                    <SelectItem value="50m_100m">₦50,000,000 - ₦100,000,000</SelectItem>
+                    <SelectItem value="above_100m">Above ₦100,000,000</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
