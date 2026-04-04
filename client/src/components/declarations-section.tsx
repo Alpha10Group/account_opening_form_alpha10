@@ -259,16 +259,47 @@ export default function DeclarationsSection({ form, prefix, showSecondSignature 
           {accountType !== "corporate" ? (
             <>
               <h4 className="font-bold text-primary mb-3 text-base">TERMS AND CONDITIONS</h4>
-              <p className="mb-3">
-                This AGREEMENT is made this ____ day of __________
+              <p className="mb-3 flex items-baseline flex-wrap gap-1">
+                <span>This AGREEMENT is made this</span>
+                <input
+                  {...form.register(`${prefix}.agreementDay`)}
+                  data-testid="input-agreement-day"
+                  placeholder="___"
+                  className="border-b border-gray-500 w-10 text-center text-sm focus:outline-none focus:border-primary bg-transparent"
+                />
+                <span>day of</span>
+                <input
+                  {...form.register(`${prefix}.agreementDate`)}
+                  data-testid="input-agreement-date"
+                  placeholder="_________"
+                  className="border-b border-gray-500 w-28 text-center text-sm focus:outline-none focus:border-primary bg-transparent"
+                />
               </p>
               <p className="mb-1"><strong>Between</strong></p>
-              <p className="mb-3 italic">
-                ________________________________________ (Name of Client)<br />
-                of ______________________________________<br />
-                (Address of Client)<br />
-                (hereinafter referred to as the "Client" or "You" which expression shall wherever the context admits include its
-                legal representatives/successors-in-title and permitted assigns) of the first part.
+              <p className="mb-3">
+                <span className="flex items-baseline gap-1 mb-1">
+                  <input
+                    {...form.register(`${prefix}.clientName`)}
+                    data-testid="input-client-name"
+                    placeholder="Name of Client"
+                    className="border-b border-gray-500 flex-1 text-sm focus:outline-none focus:border-primary bg-transparent italic"
+                  />
+                  <span className="text-xs italic shrink-0">(Name of Client)</span>
+                </span>
+                <span className="flex items-baseline gap-1 mb-0.5">
+                  <span className="text-sm shrink-0">of</span>
+                  <input
+                    {...form.register(`${prefix}.clientAddress`)}
+                    data-testid="input-client-address"
+                    placeholder="Address of Client"
+                    className="border-b border-gray-500 flex-1 text-sm focus:outline-none focus:border-primary bg-transparent italic"
+                  />
+                </span>
+                <span className="text-xs italic block">(Address of Client)</span>
+                <span className="text-sm block mt-1">
+                  (hereinafter referred to as the "Client" or "You" which expression shall wherever the context admits include its
+                  legal representatives/successors-in-title and permitted assigns) of the first part.
+                </span>
               </p>
               <p className="mb-1"><strong>And</strong></p>
               <p className="mb-3">
